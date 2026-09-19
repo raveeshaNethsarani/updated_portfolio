@@ -237,3 +237,64 @@ export const PROJECTS_DATA: ProjectItem[] = [
     previewType: 'e-commerce'
   }
 ];
+
+export interface ShowcaseProject {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  technologies: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+  image?: string;
+}
+
+// Keep this list intentionally separate from the case-study content above so it
+// can be edited without changing the existing modal experience.
+export const PROJECTS: ShowcaseProject[] = [
+  {
+    id: 'animal-clinic',
+    title: 'Animal Clinic',
+    category: 'MERN STACK',
+    description: 'A MERN stack project for an animal clinic, sourced from the public Animal-Clinic repository.',
+    technologies: ['MongoDB', 'Express.js', 'React', 'Node.js'],
+    githubUrl: 'https://github.com/raveeshaNethsarani/Animal-Clinic',
+    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop'
+  },
+  {
+    id: 'aura-furniture',
+    title: 'Aura Furniture',
+    category: 'NEXT.JS',
+    description: 'A furniture storefront built with Next.js and deployed as the Aura Furniture experience.',
+    technologies: ['Next.js'],
+    githubUrl: 'https://github.com/raveeshaNethsarani/Animal-Clinic',
+    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop'
+  },
+  {
+    id: 'bookshare',
+    title: 'BookShare',
+    category: 'MERN STACK',
+    description: 'A book-sharing platform for discovering and sharing books, built with the MERN stack.',
+    technologies: ['MongoDB', 'Express.js', 'React', 'Node.js', 'TypeScript'],
+    githubUrl: 'https://github.com/DevVault1/BookShare',
+    liveUrl: 'https://book-share-five.vercel.app'
+  },
+  {
+    id: 'mern-authentication',
+    title: 'MERN Authentication',
+    category: 'FULL STACK',
+    description: 'A full-stack authentication system built with MongoDB, Express.js, React, and Node.js.',
+    technologies: ['MongoDB', 'Express.js', 'React', 'Node.js', 'TypeScript'],
+    githubUrl: 'https://github.com/raveeshaNethsarani/MERN_Auth',
+    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop'
+  },
+  {
+    id: 'go-crud-server',
+    title: 'Go CRUD Server',
+    category: 'BACKEND API',
+    description: 'A RESTful blog CRUD API using Go, Gin, GORM, and PostgreSQL.',
+    technologies: ['Go', 'Gin', 'GORM', 'PostgreSQL'],
+    githubUrl: 'https://github.com/raveeshaNethsarani/Go_CRUD_Server',
+    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop'
+  }
+];
