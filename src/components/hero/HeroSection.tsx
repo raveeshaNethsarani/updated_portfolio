@@ -7,7 +7,7 @@ import {
   useReducedMotion,
 } from 'motion/react';
 import { ArrowDownRight, FileText } from 'lucide-react';
-import raveeshaPortrait from '../../assets/images/raveesha_hero_portrait_1787067470713.jpg';
+import raveeshaPortrait from '../../assets/images/Gemini_Generated_Image_31tv6r31tv6r31tv.jpeg';
 
 interface HeroSectionProps {
   onOpenResume: () => void;
@@ -182,14 +182,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume }) => {
               {/* Manifesto Statement with Left Accent Line */}
               <div className="border-l-2 border-[#3FB950] pl-6 sm:pl-8">
                 <p className="text-xl sm:text-2xl md:text-3xl font-light leading-relaxed text-[#C9D1D9] tracking-tight">
-                  I build digital systems from{' '}
+                 I turn complex   {' '}
                   <span className="italic font-medium text-[#C9D1D9]">
-                    interface
+                    ideas
                   </span>{' '}
-                  to{' '}
-                  <span className="italic font-semibold text-[#A371F7] underline underline-offset-8 decoration-1">
-                    infrastructure
-                  </span>
+                  into scalable digital{' '}
+                  <span className="italic font-semibold text-[#A371F7] underline underline-offset-8 decoration-1">systems</span>
                   .
                 </p>
 
@@ -201,7 +199,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume }) => {
                     </span>
 
                     <span className="mono text-xs sm:text-sm text-[#C9D1D9]">
-                      Next.js / TypeScript / MERN / Go / PostgreSQL / Microservices
+                      Next.js / TypeScript / MERN / Go / PostgreSQL 
                     </span>
                   </div>
                 </div>

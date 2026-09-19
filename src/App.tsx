@@ -4,7 +4,7 @@ import { FloatingNav } from './components/navigation/FloatingNav';
 import { HeroSection } from './components/hero/HeroSection';
 import { ParallaxTypography } from './components/typography/ParallaxTypography';
 import { HowIBuild } from './components/process/HowIBuild';
-import { SelectedWork } from './components/projects/SelectedWork';
+// import { SelectedWork } from './components/projects/SelectedWork';
 import { AboutSection } from './components/about/AboutSection';
 import { ExperienceTimeline } from './components/experience/ExperienceTimeline';
 import { TechStackSection } from './components/skills/TechStackSection';
@@ -16,7 +16,7 @@ import { GalaxyBackground } from './components/background/GalaxyBackground';
 import { CustomCursor } from './components/cursor/CustomCursor';
 import { ProjectItem } from './types';
 import { Terminal } from 'lucide-react';
-
+import { ProjectShowcase } from './components/projects/projectShowcase';
 export default function App() {
   const [loadingComplete, setLoadingComplete] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
@@ -70,13 +70,16 @@ export default function App() {
         <HowIBuild />
 
         {/* 4. Selected Work & Horizontal Project Gallery */}
-        <SelectedWork onSelectProject={(project) => setSelectedProject(project)} />
+        {/* <SelectedWork onSelectProject={(project) => setSelectedProject(project)} /> */}
 
         {/* 5. About Section: "A Developer Who Thinks In Systems" */}
         <AboutSection />
 
         {/* 6. Experience Timeline: BotCalm (Pvt) Ltd */}
         <ExperienceTimeline />
+
+        {/* Project Showcase */}
+         <ProjectShowcase/>
 
         {/* 7. Technology Stack & Currently Exploring */}
         <TechStackSection />

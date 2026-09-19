@@ -1,144 +1,508 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Terminal, Briefcase, Calendar, MapPin, CheckCircle2, Shield, Cpu, Layers, ArrowUpRight } from 'lucide-react';
-import { EXPERIENCE_DATA } from '../../data/experience';
+import React, { useState } from 'react';
+import { AnimatePresence, motion, type Variants } from 'motion/react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  Cpu,
+  Layers,
+  MapPin,
+  Terminal,
+} from 'lucide-react';
+
+import {
+  EXPERIENCE_DATA,
+  type ExperienceData,
+  type ExperienceProject,
+} from '../../data/experience';
+
+/* ============================================================
+   ANIMATION VARIANTS
+============================================================ */
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+};
+
+const staggerContainer: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+};
+
+const cardIn: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+};
+
+const listItem: Variants = {
+  hidden: { opacity: 0, x: -12 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: EASE } },
+};
+
+const slideVariants: Variants = {
+  enter: (dir: number) => ({
+    opacity: 0,
+    x: dir >= 0 ? 90 : -90,
+    scale: 0.98,
+  }),
+  center: {
+    opacity: 1,
+    x: 0,
+    scale: 1,
+    transition: { duration: 0.45, ease: EASE },
+  },
+  exit: (dir: number) => ({
+    opacity: 0,
+    x: dir >= 0 ? -90 : 90,
+    scale: 0.98,
+    transition: { duration: 0.3, ease: 'easeIn' },
+  }),
+};
+
+/* ============================================================
+   SHARED UI
+============================================================ */
+
+const NavButton: React.FC<{
+  onClick: () => void;
+  label: string;
+  children: React.ReactNode;
+}> = ({ onClick, label, children }) => (
+  <motion.button
+    type="button"
+    onClick={onClick}
+    whileHover={{ scale: 1.08 }}
+    whileTap={{ scale: 0.92 }}
+    aria-label={label}
+    className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#30363D] bg-[#0D1117] text-[#8B949E] transition-colors duration-200 hover:border-[#3FB950]/60 hover:text-[#3FB950]"
+  >
+    {children}
+  </motion.button>
+);
+
+/* ============================================================
+   SECTION EYEBROW
+============================================================ */
+
+const SectionEyebrow: React.FC<{ period: string }> = ({ period }) => (
+  <motion.div
+    variants={fadeUp}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: '-80px' }}
+    className="mb-16 flex items-center justify-between border-b border-[#30363D] pb-4 lg:mb-24"
+  >
+    <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#3FB950] sm:text-xs sm:tracking-[0.3em]">
+      <span className="h-2 w-2 animate-pulse rounded-full bg-[#3FB950]" />
+      <span>[ 04 // PROFESSIONAL LEDGER &amp; SYSTEM ROLES ]</span>
+    </div>
+
+    <span className="hidden font-mono text-[10px] uppercase tracking-widest text-[#8B949E] sm:inline-block">
+      TENURE: {period}
+    </span>
+  </motion.div>
+);
+
+/* ============================================================
+   EDITORIAL HEADER
+============================================================ */
+
+const EditorialHeader: React.FC<{ overview: string }> = ({ overview }) => (
+  <motion.div
+    variants={staggerContainer}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: '-80px' }}
+    className="mb-16 grid grid-cols-1 gap-12 border-b border-[#30363D] pb-12 lg:mb-20 lg:grid-cols-12 lg:gap-20"
+  >
+    {/* Left */}
+    <motion.div variants={fadeUp} className="lg:col-span-7">
+      <div className="mb-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8B949E]">
+        <Terminal className="h-3.5 w-3.5 text-[#3FB950]" />
+        <span>CAREER / ENGINEERING PROGRESSION</span>
+      </div>
+
+      <h2 className="font-black uppercase leading-[0.84] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] 2xl:text-[8rem]">
+        PRODUCTION
+        <br />
+        <span className="text-outline">EXPERIENCE.</span>
+      </h2>
+    </motion.div>
+
+    {/* Right */}
+    <motion.div
+      variants={fadeUp}
+      className="flex flex-col justify-end lg:col-span-5"
+    >
+      <p className="max-w-xl font-mono text-xs leading-7 text-[#8B949E] sm:text-sm">
+        {overview}
+      </p>
+
+      <div className="mt-6 flex flex-wrap items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-[#3FB950]">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-[#3FB950]" />
+        <span>ENGINEERING PROGRESSION</span>
+        <span className="text-[#30363D]">//</span>
+        <span className="text-[#C9D1D9]">
+          MERN → NEXT.JS → GO / MICROSERVICES
+        </span>
+      </div>
+    </motion.div>
+  </motion.div>
+);
+
+/* ============================================================
+   COMPANY HEADER
+============================================================ */
+
+const CompanyHeader: React.FC<{ exp: ExperienceData }> = ({ exp }) => (
+  <div className="mb-10 flex flex-col justify-between gap-8 border-b border-[#30363D] pb-8 lg:flex-row lg:items-start">
+    <div>
+      <div className="mb-3 flex flex-wrap items-center gap-3">
+        <span className="rounded border border-[#3FB950]/40 bg-[#3FB950]/10 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-[#3FB950]">
+          {exp.status}
+        </span>
+
+        <span className="flex items-center gap-1.5 font-mono text-xs text-[#8B949E]">
+          <Calendar className="h-3.5 w-3.5" />
+          {exp.period}
+        </span>
+
+        <span className="flex items-center gap-1.5 font-mono text-xs text-[#8B949E]">
+          <MapPin className="h-3.5 w-3.5" />
+          {exp.location}
+        </span>
+      </div>
+
+      <h3 className="font-black text-3xl uppercase tracking-tight text-white sm:text-5xl">
+        {exp.company}
+      </h3>
+
+      <p className="mt-2 font-mono text-sm font-bold text-[#3FB950] sm:text-base">
+        {exp.role}
+      </p>
+    </div>
+
+    <div className="max-w-md rounded-lg border border-[#30363D] bg-[#0D1117] px-4 py-3 font-mono text-[10px] leading-relaxed text-[#8B949E]">
+      PRIMARY STACK
+      <div className="mt-1 text-[#C9D1D9]">
+        MERN · Next.js · TypeScript · Go · PostgreSQL
+      </div>
+    </div>
+  </div>
+);
+
+/* ============================================================
+   ENGINEERING PROGRESSION
+============================================================ */
+
+const ProgressionGrid: React.FC<{
+  phases: ExperienceData['progression'];
+}> = ({ phases }) => (
+  <div className="mb-12">
+    <div className="mb-6 flex items-center justify-between border-b border-[#30363D]/80 pb-3">
+      <span className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-widest text-[#C9D1D9]">
+        <Layers className="h-4 w-4 text-[#3FB950]" />
+        ENGINEERING PROGRESSION
+      </span>
+
+      <span className="hidden font-mono text-[10px] text-[#8B949E] sm:block">
+        03 DEVELOPMENT PHASES
+      </span>
+    </div>
+
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+      className="grid grid-cols-1 gap-4 md:grid-cols-3"
+    >
+      {phases.map((phase) => (
+        <motion.div
+          key={phase.number}
+          variants={cardIn}
+          whileHover={{ y: -4 }}
+          className="rounded-xl border border-[#30363D] bg-[#0D1117] p-5 transition-colors duration-300 hover:border-[#3FB950]/40"
+        >
+          <div className="mb-5 flex items-center justify-between">
+            <span className="font-mono text-[10px] font-bold text-[#3FB950]">
+              PHASE-{phase.number}
+            </span>
+            <span className="font-mono text-[10px] text-[#8B949E]">
+              {phase.label}
+            </span>
+          </div>
+
+          <h4 className="mb-2 text-sm font-bold text-white">{phase.title}</h4>
+          <p className="text-xs leading-6 text-[#8B949E]">{phase.description}</p>
+        </motion.div>
+      ))}
+    </motion.div>
+  </div>
+);
+
+/* ============================================================
+   PROJECT CAROUSEL
+============================================================ */
+
+const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
+  projects,
+}) => {
+  // [activeIndex, direction] — direction drives enter/exit slide side.
+  const [[activeProject, direction], setActive] = useState<[number, number]>([
+    0, 0,
+  ]);
+
+  const paginate = (index: number, dir: number) => setActive([index, dir]);
+
+  const goToNext = () =>
+    paginate(activeProject === projects.length - 1 ? 0 : activeProject + 1, 1);
+
+  const goToPrevious = () =>
+    paginate(activeProject === 0 ? projects.length - 1 : activeProject - 1, -1);
+
+  const goToProject = (index: number) => {
+    if (index === activeProject) return;
+    paginate(index, index > activeProject ? 1 : -1);
+  };
+
+  const project = projects[activeProject];
+  const Icon = project.icon;
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-end justify-between border-b border-[#30363D]/80 pb-3">
+        <div>
+          <div className="mb-2 flex items-center gap-2">
+            <Cpu className="h-4 w-4 text-[#3FB950]" />
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#C9D1D9]">
+              PROJECTS &amp; PRODUCTION SYSTEMS
+            </span>
+          </div>
+          <p className="font-mono text-[10px] text-[#8B949E]">
+            SELECT SYSTEM // DRAG OR NAVIGATE
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <NavButton onClick={goToPrevious} label="Previous project">
+            <ArrowLeft className="h-4 w-4" />
+          </NavButton>
+          <NavButton onClick={goToNext} label="Next project">
+            <ArrowRight className="h-4 w-4" />
+          </NavButton>
+        </div>
+      </div>
+
+      {/* Viewport */}
+      <div className="relative overflow-hidden rounded-xl">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.article
+            key={project.code}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.15}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -80) goToNext();
+              else if (info.offset.x > 80) goToPrevious();
+            }}
+            className="group cursor-grab rounded-2xl border border-[#3FB950]/40 bg-[#0D1117] p-6 active:cursor-grabbing sm:p-8 lg:p-10"
+          >
+            {/* Project header */}
+            <div className="mb-8 flex flex-col gap-6 border-b border-[#30363D]/70 pb-7 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex gap-4">
+                <div
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border"
+                  style={{
+                    borderColor: `${project.color}55`,
+                    backgroundColor: `${project.color}10`,
+                    color: project.color,
+                  }}
+                >
+                  <Icon className="h-5 w-5" />
+                </div>
+
+                <div>
+                  <div className="mb-2 flex flex-wrap items-center gap-3">
+                    <span className="font-mono text-[10px] font-bold text-[#3FB950]">
+                      {project.code}
+                    </span>
+                    <span className="h-1 w-1 rounded-full bg-[#30363D]" />
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-[#8B949E]">
+                      {project.category}
+                    </span>
+                  </div>
+
+                  <h4 className="text-2xl font-black uppercase tracking-tight text-white sm:text-3xl">
+                    {project.title}
+                  </h4>
+                </div>
+              </div>
+
+              <div className="font-mono text-[10px] text-[#8B949E]">
+                SYSTEM {String(activeProject + 1).padStart(2, '0')} /{' '}
+                {String(projects.length).padStart(2, '0')}
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="mb-10 max-w-5xl text-sm leading-7 text-[#8B949E] sm:text-base">
+              {project.description}
+            </p>
+
+            {/* Content */}
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+              {/* Contributions */}
+              <div className="lg:col-span-8">
+                <div className="mb-4 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-[#8B949E]">
+                  <span className="h-px w-5 bg-[#3FB950]" />
+                  CONTRIBUTIONS
+                </div>
+
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2"
+                >
+                  {project.responsibilities.map((item) => (
+                    <motion.div
+                      key={item}
+                      variants={listItem}
+                      className="flex gap-3 text-xs leading-6 text-[#C9D1D9]"
+                    >
+                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[#3FB950]" />
+                      <span>{item}</span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
+
+              {/* Technology */}
+              <div className="lg:col-span-4">
+                <div className="mb-4 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-[#8B949E]">
+                  <span className="h-px w-5 bg-[#58A6FF]" />
+                  TECHNOLOGY
+                </div>
+
+                <motion.div
+                  variants={staggerContainer}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex flex-wrap gap-2"
+                >
+                  {project.stack.map((tag) => (
+                    <motion.span
+                      key={tag}
+                      variants={listItem}
+                      whileHover={{ y: -2 }}
+                      className="rounded-md border border-[#30363D] bg-[#161B22] px-2.5 py-1.5 font-mono text-[10px] text-[#8B949E] transition-colors hover:border-[#3FB950]/50 hover:text-[#C9D1D9]"
+                    >
+                      {tag}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              </div>
+            </div>
+          </motion.article>
+        </AnimatePresence>
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-2">
+        {/* Indicators */}
+        <div className="flex items-center gap-2">
+          {projects.map((p, index) => (
+            <button
+              key={p.code}
+              type="button"
+              onClick={() => goToProject(index)}
+              className="group flex items-center gap-2"
+              aria-label={`Go to ${p.title}`}
+            >
+              <span
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  activeProject === index
+                    ? 'w-10 bg-[#3FB950]'
+                    : 'w-3 bg-[#30363D] group-hover:bg-[#8B949E]'
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+
+        {/* Counter */}
+        <div className="font-mono text-[9px] uppercase tracking-widest text-[#8B949E]">
+          SYSTEM{' '}
+          <span className="text-[#C9D1D9]">
+            {String(activeProject + 1).padStart(2, '0')}
+          </span>
+          {' / '}
+          {String(projects.length).padStart(2, '0')}
+        </div>
+
+        {/* Drag hint */}
+        <div className="hidden items-center gap-2 font-mono text-[9px] uppercase tracking-widest text-[#8B949E] sm:flex">
+          <ArrowLeft className="h-3 w-3" />
+          <span>DRAG TO EXPLORE</span>
+          <ArrowRight className="h-3 w-3" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ============================================================
+   MAIN SECTION
+============================================================ */
 
 export const ExperienceTimeline: React.FC = () => {
   const currentExp = EXPERIENCE_DATA[0];
 
   return (
-    <section id="experience" className="relative bg-[#0D1117] py-24 sm:py-36 border-b border-[#30363D]">
-      {/* Background Subtle Grid */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-15 pointer-events-none" />
+    <section
+      id="experience"
+      className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117] py-24 sm:py-32 lg:py-40"
+    >
+      {/* Background */}
+      <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-15" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
-        {/* Editorial Section Eyebrow & Header */}
-        <div className="flex items-center justify-between border-b border-[#30363D] pb-4 mb-16">
-          <div className="flex items-center gap-3 text-[#3FB950] mono text-xs tracking-[0.3em] uppercase">
-            <span className="w-2 h-2 rounded-full bg-[#3FB950] inline-block" />
-            <span>[ 04 // PROFESSIONAL LEDGER &amp; SYSTEM ROLES ]</span>
-          </div>
-          <span className="hidden sm:inline-block mono text-[10px] text-[#8B949E] uppercase tracking-widest">
-            TENURE: 2024 &ndash; PRESENT
-          </span>
-        </div>
+      {/* Container */}
+      <div className="relative z-10 mx-auto w-full max-w-[1920px] px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
+        <SectionEyebrow period={currentExp.period} />
+        <EditorialHeader overview={currentExp.overview} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end justify-between border-b border-[#30363D] pb-12 mb-16">
-          <div className="lg:col-span-8">
-            <h2 className="font-black text-5xl sm:text-7xl md:text-8xl text-[#C9D1D9] tracking-tighter uppercase leading-[0.88]">
-              PRODUCTION<br />
-              <span className="text-outline">EXPERIENCE.</span>
-            </h2>
+        {/* Timeline */}
+        <div className="relative pl-6 sm:pl-10">
+          {/* Timeline line */}
+          <div className="absolute bottom-0 left-0 top-0 w-px bg-gradient-to-b from-[#3FB950] via-[#3FB950]/50 to-transparent" />
+
+          {/* Timeline node */}
+          <div className="absolute -left-[7px] top-0 flex h-3.5 w-3.5 items-center justify-center rounded-full border border-[#3FB950] bg-[#0D1117]">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#3FB950]" />
           </div>
 
-          <div className="lg:col-span-4 space-y-3">
-            <p className="mono text-xs sm:text-sm text-[#8B949E] leading-relaxed">
-              Leading full-stack system initiatives at BotCalm: architecting payment flows, secure webhook engines, AI agents, and enterprise RBAC matrices.
-            </p>
-            <div className="flex items-center gap-2 mono text-xs text-[#3FB950]">
-              <span className="w-2 h-2 rounded-full bg-[#3FB950] animate-pulse" />
-              <span>ACTIVE SYSTEM DEPLOYMENT</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Engineering Ledger Architecture Container */}
-        <div className="relative pl-6 sm:pl-10 border-l-2 border-[#3FB950]/50 space-y-12">
-          {/* Active Ping Node */}
-          <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#0D1117] border-2 border-[#3FB950] flex items-center justify-center">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#3FB950] animate-ping" />
-          </div>
-
-          {/* Main Experience Ledger Block */}
-          <div className="bg-[#161B22] border border-[#30363D] rounded-2xl p-6 sm:p-12 shadow-2xl relative">
-            {/* Top Specification Header */}
-            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 border-b border-[#30363D] pb-8 mb-10">
-              <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="px-3 py-1 rounded bg-[#3FB950]/10 border border-[#3FB950]/40 text-[#3FB950] font-mono text-xs font-bold uppercase tracking-widest">
-                    {currentExp.status}
-                  </span>
-                  <span className="font-mono text-xs text-[#8B949E] flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5" />
-                    {currentExp.period}
-                  </span>
-                </div>
-                <h3 className="font-black text-3xl sm:text-5xl text-white tracking-tight uppercase">
-                  {currentExp.company}
-                </h3>
-                <h4 className="font-mono font-bold text-base sm:text-lg text-[#3FB950]">
-                  // {currentExp.role}
-                </h4>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <div className="font-mono text-xs text-[#C9D1D9] px-3.5 py-2 bg-[#0D1117] border border-[#30363D] rounded-lg flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-[#58A6FF]" />
-                  <span>{currentExp.location}</span>
-                </div>
-                <div className="font-mono text-xs text-[#8B949E] px-3.5 py-2 bg-[#0D1117] border border-[#30363D] rounded-lg">
-                  PRIMARY STACK: Next.js / TypeScript / Go / PostgreSQL
-                </div>
-              </div>
-            </div>
-
-            {/* Overview Narrative */}
-            <p className="text-base sm:text-lg text-[#C9D1D9]/90 font-light leading-relaxed mb-12 max-w-4xl">
-              {currentExp.overview}
-            </p>
-
-            {/* Systematic Responsibilities Matrix */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-[#30363D]/80 pb-3">
-                <span className="font-mono text-xs text-[#C9D1D9] tracking-widest uppercase font-bold flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-[#3FB950]" />
-                  <span>CORE PRODUCTION SCOPES &amp; DELIVERABLES</span>
-                </span>
-                <span className="font-mono text-[10px] text-[#8B949E]">
-                  9 SUBSYSTEM DOMAINS
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {currentExp.focusAreas.map((focus, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 15 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.04, duration: 0.4 }}
-                    className="p-5 bg-[#0D1117] border border-[#30363D]/80 hover:border-[#3FB950]/80 rounded-xl flex flex-col justify-between transition-all duration-200 group"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="font-mono text-[10px] text-[#3FB950] font-bold">
-                          DOM-0{index + 1}
-                        </span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#30363D] group-hover:bg-[#3FB950] transition-colors" />
-                      </div>
-                      <h5 className="font-bold text-base text-[#C9D1D9] group-hover:text-white transition-colors mb-2">
-                        {focus.title}
-                      </h5>
-                      <p className="text-xs text-[#8B949E] leading-relaxed mb-5">
-                        {focus.description}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1.5 pt-3 border-t border-[#30363D]/60">
-                      {focus.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#161B22] text-[#8B949E] group-hover:text-[#C9D1D9] border border-[#30363D]/60"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Main experience card */}
+          <motion.div
+            variants={cardIn}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            className="rounded-2xl border border-[#30363D] bg-[#161B22] p-6 shadow-2xl sm:p-10 lg:p-12"
+          >
+            <CompanyHeader exp={currentExp} />
+            <ProgressionGrid phases={currentExp.progression} />
+            <ProjectCarousel projects={currentExp.projects} />
+          </motion.div>
         </div>
       </div>
     </section>

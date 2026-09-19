@@ -57,7 +57,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 25 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full max-w-4xl bg-[#161B22] border border-[#30363D] rounded-2xl shadow-2xl overflow-hidden z-10 my-auto text-[#C9D1D9] max-h-[92vh] flex flex-col print:max-h-none print:border-none print:bg-white print:text-black"
+          className="relative w-full max-w-[1920px] mx-auto bg-[#161B22] border border-[#30363D] rounded-2xl shadow-2xl overflow-hidden z-10 my-auto text-[#C9D1D9] max-h-[92vh] flex flex-col print:max-h-none print:border-none print:bg-white print:text-black"
         >
           {/* Header Bar */}
           <div className="flex items-center justify-between p-6 sm:p-8 border-b border-[#30363D] bg-[#161B22] print:hidden">
@@ -104,7 +104,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                   RAVEESHA NETHSARANI
                 </h1>
                 <h2 className="font-mono text-sm sm:text-base text-[#3FB950] font-bold uppercase tracking-wider">
-                  // FULL STACK SYSTEM ENGINEER
+                   FULL STACK SYSTEM ENGINEER
                 </h2>
                 <p className="font-mono text-xs text-[#8B949E] flex items-center gap-2 pt-1">
                   <MapPin className="w-3.5 h-3.5 text-[#58A6FF]" />
