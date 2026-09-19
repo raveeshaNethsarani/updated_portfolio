@@ -54,7 +54,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onOpenResume, onOpenTe
         className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-4 sm:py-6 flex justify-center pointer-events-none"
       >
         <div
-          className={`pointer-events-auto w-full max-w-7xl mx-auto flex items-center justify-between px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl transition-all duration-300 ${
+          className={`pointer-events-auto w-full max-w-[1920px] mx-auto flex items-center justify-between px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl transition-all duration-300 ${
             isScrolled
               ? 'bg-[#161B22]/75 backdrop-blur-md border border-[#30363D] shadow-2xl shadow-black/50'
               : 'bg-transparent border border-transparent'

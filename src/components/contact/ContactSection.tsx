@@ -30,7 +30,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const emailAddress = 'raveesha.nethsarani.dev@gmail.com';
+  const emailAddress = 'raveeshanethsarani963@gmail.com';
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(emailAddress);
@@ -113,15 +113,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
                   <span className="text-white font-medium select-all">{emailAddress}</span>
                 </div>
 
-                <div className="p-3.5 bg-[#0D1117] border border-[#30363D]/70 rounded-xl flex items-center justify-between">
+                {/* <div className="p-3.5 bg-[#0D1117] border border-[#30363D]/70 rounded-xl flex items-center justify-between">
                   <span className="text-[#8B949E]">ORGANIZATION:</span>
                   <span className="text-[#3FB950] font-medium">BotCalm (Pvt) Ltd</span>
-                </div>
+                </div> */}
 
-                <div className="p-3.5 bg-[#0D1117] border border-[#30363D]/70 rounded-xl flex items-center justify-between">
+                {/* <div className="p-3.5 bg-[#0D1117] border border-[#30363D]/70 rounded-xl flex items-center justify-between">
                   <span className="text-[#8B949E]">TIMEZONE:</span>
                   <span className="text-[#58A6FF] font-medium">Sri Lanka (UTC +05:30)</span>
-                </div>
+                </div> */}
 
                 <div className="p-3.5 bg-[#0D1117] border border-[#30363D]/70 rounded-xl flex items-center justify-between">
                   <span className="text-[#8B949E]">RESPONSE SLA:</span>
@@ -165,17 +165,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
             </div>
 
             <div className="p-6 bg-[#161B22] border border-[#30363D] rounded-2xl font-mono text-xs text-[#8B949E] space-y-2">
-              <span className="text-white font-bold block uppercase tracking-wider text-[11px]">PRODUCTION DOMAINS OPEN TO:</span>
-              <p className="flex items-center gap-2 text-[#C9D1D9]">
-                <span className="text-[#3FB950]">&bull;</span> Full Stack System Architecture &amp; Scalability
-              </p>
-              <p className="flex items-center gap-2 text-[#C9D1D9]">
-                <span className="text-[#3FB950]">&bull;</span> High-Throughput APIs, Webhooks, &amp; Stripe Integrations
-              </p>
-              <p className="flex items-center gap-2 text-[#C9D1D9]">
-                <span className="text-[#3FB950]">&bull;</span> Real-Time Workloads, AI Agents, &amp; Database RBAC
-              </p>
-            </div>
+            <p className="lg:col-span-8 mono text-sm sm:text-base text-[#8B949E] leading-relaxed max-w-2xl font-light">
+              Available for technical leadership, full-stack system architecture, high-throughput backend services, and high-impact software engineering projects.
+            </p>
+          </div>
           </div>
 
           {/* Inquiry Form Right Column */}
@@ -219,7 +212,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
                       className="w-full bg-[#0D1117] border border-[#30363D] rounded-xl px-4 py-3.5 text-white placeholder:text-[#8B949E]/40 focus:outline-none focus:border-[#3FB950] transition-colors"
                     />
                   </div>
-
+{/* 
                   <div>
                     <label className="block text-[#8B949E] mb-2 uppercase tracking-wider text-[11px] font-bold">
                       PROJECT DOMAIN / SCOPE
@@ -235,7 +228,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
                       <option value="Database Optimization & RBAC">Database Optimization &amp; RBAC</option>
                       <option value="General Technical Consultation">General Technical Consultation</option>
                     </select>
-                  </div>
+                  </div> */}
 
                   <div>
                     <label className="block text-[#8B949E] mb-2 uppercase tracking-wider text-[11px] font-bold">

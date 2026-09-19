@@ -12,7 +12,6 @@ const ROW_1_TECHS = [
   { name: 'Socket.IO', category: 'Real-time' },
   { name: 'PostgreSQL', category: 'Database' },
   { name: 'Docker', category: 'DevOps' },
-  { name: 'GraphQL', category: 'API' }
 ];
 
 const ROW_2_TECHS = [
@@ -21,8 +20,6 @@ const ROW_2_TECHS = [
   { name: 'Docker', category: 'Containers' },
   { name: 'Apache Kafka', category: 'Event Streaming' },
   { name: 'Redis', category: 'Cache' },
-  { name: 'Prisma', category: 'ORM' },
-  { name: 'Spring Boot', category: 'Java' },
   { name: 'Zustand', category: 'State' },
   { name: 'Zod', category: 'Schema' },
   { name: 'AWS S3', category: 'Cloud Storage' },
