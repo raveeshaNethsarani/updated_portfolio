@@ -30,7 +30,7 @@ export const TechStackSection: React.FC = () => {
       {/* Background Dots */}
       <div className="absolute inset-0 bg-dot-pattern opacity-15 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         {/* Editorial Section Eyebrow & Header */}
         <div className="flex items-center justify-between border-b border-[#30363D] pb-4 mb-16">
           <div className="flex items-center gap-3 text-[#3FB950] mono text-xs tracking-[0.3em] uppercase">
@@ -44,7 +44,7 @@ export const TechStackSection: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end justify-between border-b border-[#30363D] pb-12 mb-12">
           <div className="lg:col-span-8">
-            <h2 className="font-black text-5xl sm:text-7xl md:text-8xl text-[#C9D1D9] tracking-tighter uppercase leading-[0.88]">
+            <h2 className="font-black text-5xl sm:text-7xl md:text-8xl xl:text-[9rem] text-[#C9D1D9] tracking-tighter uppercase leading-[0.88]">
               TECHNICAL<br />
               <span className="text-outline">TOOLCHAIN.</span>
             </h2>
@@ -181,7 +181,7 @@ export const TechStackSection: React.FC = () => {
         </div>
 
         {/* Hovered Skill Live Inspector Pill */}
-        {hoveredSkill && (
+        {/* {hoveredSkill && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -200,7 +200,7 @@ export const TechStackSection: React.FC = () => {
               <span className="text-[#58A6FF]">{hoveredSkill.notes}</span>
             )}
           </motion.div>
-        )}
+        )} */}
 
         {/* CURRENTLY EXPLORING SECTION */}
         <CurrentlyExploring />

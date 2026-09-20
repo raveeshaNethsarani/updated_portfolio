@@ -217,7 +217,7 @@ export const HowIBuild: React.FC = () => {
     >
       <div
         ref={pinRef}
-        className={`w-full flex flex-col justify-between py-16 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto overflow-hidden select-none ${
+        className={`w-full flex flex-col justify-between py-16 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-[1920px] mx-auto overflow-hidden select-none ${
           isDesktopPinned ? 'h-screen sticky top-0' : 'min-h-[85vh]'
         }`}
       >
@@ -341,7 +341,7 @@ export const HowIBuild: React.FC = () => {
                   {activeStep.tagline}
                 </p>
 
-                <p className="text-base text-[#8B949E] leading-relaxed mb-8 max-w-2xl">
+                <p className="text-base text-[#8B949E] leading-relaxed mb-8 ">
                   {activeStep.description}
                 </p>
 
@@ -387,16 +387,12 @@ export const HowIBuild: React.FC = () => {
         </div>
 
         {/* Bottom Timeline Progress Ribbon */}
-        <div className="border-t border-[#30363D] pt-4 flex flex-wrap items-center justify-between text-xs font-mono text-[#8B949E]">
+        {/* <div className="border-t border-[#30363D] pt-4 flex flex-wrap items-center justify-between text-xs font-mono text-[#8B949E]">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#3FB950]" />
             <span>{isDesktopPinned ? 'CONTINUOUS CYCLE: SCROLL DOWN TO PROGRESS' : 'ENGINEERING ITERATION CYCLE'}</span>
           </div>
-          <div className="hidden sm:flex items-center gap-4 text-[11px]">
-            <span>SLIATE GALLE &amp; BOTCALM RIGOR</span>
-            <span>ZERO DEFECT TOLERANCE</span>
-          </div>
-        </div>
+      </div> */}
       </div>
     </section>
   );
