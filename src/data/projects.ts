@@ -259,7 +259,8 @@ export const PROJECTS: ShowcaseProject[] = [
     description: 'A MERN stack project for an animal clinic, sourced from the public Animal-Clinic repository.',
     technologies: ['MongoDB', 'Express.js', 'React', 'Node.js'],
     githubUrl: 'https://github.com/raveeshaNethsarani/Animal-Clinic',
-    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop'
+    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop',
+    image: '/src/assets/images/image.png'
   },
   {
     id: 'aura-furniture',
@@ -268,7 +269,8 @@ export const PROJECTS: ShowcaseProject[] = [
     description: 'A furniture storefront built with Next.js and deployed as the Aura Furniture experience.',
     technologies: ['Next.js'],
     githubUrl: 'https://github.com/raveeshaNethsarani/Animal-Clinic',
-    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop'
+    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop',
+    image: '/src/assets/images/image.png'
   },
   {
     id: 'bookshare',
@@ -277,7 +279,8 @@ export const PROJECTS: ShowcaseProject[] = [
     description: 'A book-sharing platform for discovering and sharing books, built with the MERN stack.',
     technologies: ['MongoDB', 'Express.js', 'React', 'Node.js', 'TypeScript'],
     githubUrl: 'https://github.com/DevVault1/BookShare',
-    liveUrl: 'https://book-share-five.vercel.app'
+    liveUrl: 'https://book-share-five.vercel.app',
+    image: '/src/assets/images/image.png'
   },
   {
     id: 'mern-authentication',
@@ -286,7 +289,8 @@ export const PROJECTS: ShowcaseProject[] = [
     description: 'A full-stack authentication system built with MongoDB, Express.js, React, and Node.js.',
     technologies: ['MongoDB', 'Express.js', 'React', 'Node.js', 'TypeScript'],
     githubUrl: 'https://github.com/raveeshaNethsarani/MERN_Auth',
-    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop'
+    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop',
+    image: '/src/assets/images/image.png'
   },
   {
     id: 'go-crud-server',
@@ -295,6 +299,7 @@ export const PROJECTS: ShowcaseProject[] = [
     description: 'A RESTful blog CRUD API using Go, Gin, GORM, and PostgreSQL.',
     technologies: ['Go', 'Gin', 'GORM', 'PostgreSQL'],
     githubUrl: 'https://github.com/raveeshaNethsarani/Go_CRUD_Server',
-    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop'
+    liveUrl: 'https://aura-furniture-frontend.netlify.app/shop',
+    image: '/src/assets/images/image.png'
   }
 ];

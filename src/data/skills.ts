@@ -41,7 +41,6 @@ export const SKILLS_DATA: SkillCategory[] = [
       { name: 'REST APIs', level: 'Expert', highlight: true, notes: 'Resource Modeling, Idempotency, Contract Consumption' },
       { name: 'Third-Party API Integration', level: 'Advanced', highlight: true, notes: 'Payment Gateways, Webhook Handlers' },
       { name: 'Java', level: 'Intermediate', notes: 'OOP Principles, Concurrency, JVM Internals' },
-      { name: 'Spring Boot', level: 'Intermediate', notes: 'Dependency Injection, Spring MVC, JPA' },
       { name: 'Go', level: 'Exploring / Practical', highlight: true, notes: 'Goroutines, Channels, Standard Library HTTP' }
     ]
   },
@@ -54,7 +53,6 @@ export const SKILLS_DATA: SkillCategory[] = [
       { name: 'Mongoose', level: 'Advanced', notes: 'Schema Middleware, Population, Validation' },
       { name: 'MongoDB Atlas', level: 'Advanced', notes: 'Cluster Provisioning, VPC Peering, Backups' },
       { name: 'PostgreSQL', level: 'Advanced', highlight: true, notes: 'Indexing, Constraints, Transactions, JSONB' },
-      { name: 'Prisma', level: 'Advanced', notes: 'Type-Safe Queries, Migrations, Relations' },
       { name: 'Cloudinary', level: 'Advanced', highlight: true, notes: 'On-the-fly Image Transformations & Delivery' },
       { name: 'AWS S3', level: 'Intermediate', highlight: true, notes: 'Presigned Upload URLs, Bucket Policies, Lifecycle' }
     ]
@@ -65,8 +63,6 @@ export const SKILLS_DATA: SkillCategory[] = [
     description: 'Token security, identity providers and permission models.',
     skills: [
       { name: 'JWT', level: 'Advanced', highlight: true, notes: 'Signed Claims, Refresh Token Rotation, Blacklists' },
-      { name: 'Firebase Authentication', level: 'Advanced', notes: 'OAuth Providers, Custom Claims, Session Cookies' },
-      { name: 'OAuth', level: 'Intermediate', notes: 'Authorization Code Flow with PKCE' },
       { name: 'RBAC', level: 'Advanced', highlight: true, notes: 'Role & Permission Bitmasks, Dynamic ACL' },
       { name: 'API Security', level: 'Advanced', highlight: true, notes: 'CORS, CSP, HMAC Signatures, Rate Limiting' }
     ]
