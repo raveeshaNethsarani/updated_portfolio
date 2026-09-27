@@ -78,7 +78,7 @@ export const TechStackSection: React.FC = () => {
 
         {/* Header — single horizontal row */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-8">
-          <h2 className="font-black text-4xl sm:text-5xl xl:text-6xl text-[#C9D1D9] tracking-tighter uppercase leading-[0.9]">
+          <h2 className="font-black text-4xl sm:text-5xl xl:text-[9rem] text-[#C9D1D9] tracking-tighter uppercase leading-[0.9]">
             TECHNICAL <span className="text-outline">TOOLCHAIN.</span>
           </h2>
           <div className="lg:max-w-md space-y-2">
@@ -153,7 +153,7 @@ export const TechStackSection: React.FC = () => {
 
         {/* Inspector strip — shows notes instead of taking card height */}
         <div className="h-9 mb-5 flex items-center justify-between gap-4 px-3 rounded-lg border border-dashed border-[#30363D] bg-[#0D1117]/60 font-mono text-[11px] overflow-hidden">
-          <div className="flex items-center gap-2 min-w-0">
+          {/* <div className="flex items-center gap-2 min-w-0">
             {activeSkill ? (
               <>
                 <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${dotFor(activeSkill.level)}`} />
@@ -166,7 +166,7 @@ export const TechStackSection: React.FC = () => {
             ) : (
               <span className="text-[#8B949E]">// hover or tap a technology to inspect details</span>
             )}
-          </div>
+          </div> */}
           <div className="hidden md:flex items-center gap-3 shrink-0 text-[10px] text-[#8B949E] uppercase">
             {LEGEND.map(([label, dot]) => (
               <span key={label} className="flex items-center gap-1.5">

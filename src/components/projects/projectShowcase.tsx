@@ -1,175 +1,504 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FocusEvent,
+  type KeyboardEvent,
+  type PointerEvent,
+  type ReactNode,
+} from 'react';
+import {
+  AnimatePresence,
+  MotionConfig,
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  type Variants,
+} from 'motion/react';
 import { ChevronLeft, ChevronRight, Pause, Play, Terminal } from 'lucide-react';
 import { PROJECTS } from '../../data/projects';
 import { ProjectCard } from './ProjectCard';
 
 const AUTOPLAY_DELAY = 6500;
+const TOTAL = PROJECTS.length;
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+// One shared gutter so the header and the card track line up exactly.
+const GUTTER = 'px-4 sm:px-8 lg:px-12 xl:px-16';
+const SCROLL_GUTTER = 'scroll-px-4 sm:scroll-px-8 lg:scroll-px-12 xl:scroll-px-16';
+
+const pad = (value: number) => String(value).padStart(2, '0');
+
+/* ---------------------------- animation variants --------------------------- */
+
+const headerVariants: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+
+const riseVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE } },
+};
+
+const lineVariants: Variants = {
+  hidden: { y: '110%' },
+  show: { y: '0%', transition: { duration: 0.9, ease: EASE } },
+};
+
+const trackVariants: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 48, scale: 0.96 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: EASE } },
+};
+
+/* --------------------------------- controls -------------------------------- */
+
+interface ControlButtonProps {
+  label: string;
+  onClick: () => void;
+  children: ReactNode;
+  accent?: boolean;
+}
+
+const ControlButton = ({ label, onClick, children, accent = false }: ControlButtonProps) => (
+  <motion.button
+    type="button"
+    onClick={onClick}
+    aria-label={label}
+    whileHover={{ y: -2 }}
+    whileTap={{ scale: 0.92 }}
+    className={`grid h-10 w-10 place-items-center rounded-full border border-[#30363D] bg-[#161B22]/80 backdrop-blur transition-colors duration-300 ${
+      accent
+        ? 'text-[#C9D1D9] hover:border-[#3FB950] hover:text-[#3FB950]'
+        : 'text-[#8B949E] hover:border-[#8B949E] hover:text-[#C9D1D9]'
+    }`}
+  >
+    {children}
+  </motion.button>
+);
+
+/* ------------------------------ main component ----------------------------- */
 
 export const ProjectShowcase = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const [isAutoplayEnabled, setIsAutoplayEnabled] = useState(true);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const cardRefs = useRef<Array<HTMLElement | null>>([]);
-  const dragState = useRef({ active: false, startX: 0, startScrollLeft: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isTouching, setIsTouching] = useState(false);
+  const [edges, setEdges] = useState({ start: false, end: false });
 
-  const move = useCallback((nextIndex: number) => {
-    const normalizedIndex = (nextIndex + PROJECTS.length) % PROJECTS.length;
-    setActiveIndex(normalizedIndex);
-    const card = cardRefs.current[normalizedIndex];
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const activeRef = useRef(0);
+  const settleTimer = useRef<number | null>(null);
+  const drag = useRef({ active: false, moved: false, startX: 0, startScroll: 0, pointerId: -1 });
+
+  const isInView = useInView(sectionRef, { amount: 0.3 });
+  const prefersReducedMotion = useReducedMotion();
+  const progress = useMotionValue(0);
+
+  useEffect(() => {
+    activeRef.current = activeIndex;
+  }, [activeIndex]);
+
+  /* ------------------------------ scroll helpers ------------------------------ */
+
+  const getGutter = (track: HTMLDivElement) => parseFloat(getComputedStyle(track).paddingLeft) || 0;
+
+  const updateEdges = useCallback(() => {
     const track = trackRef.current;
-    if (card && track) {
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      track.scrollTo({ left: cardCenter - track.offsetWidth / 2, behavior: 'smooth' });
-    }
+    if (!track) return;
+    const max = track.scrollWidth - track.clientWidth;
+    const start = track.scrollLeft > 4;
+    const end = track.scrollLeft < max - 4;
+    setEdges((prev) => (prev.start === start && prev.end === end ? prev : { start, end }));
   }, []);
 
-  const next = useCallback(() => move(activeIndex + 1), [activeIndex, move]);
-  const previous = useCallback(() => move(activeIndex - 1), [activeIndex, move]);
+  /** Works out which card is "current" once a scroll or drag settles. */
+  const resolveIndex = useCallback((current: number) => {
+    const track = trackRef.current;
+    if (!track) return current;
+
+    const max = track.scrollWidth - track.clientWidth;
+    const viewStart = track.scrollLeft;
+    const viewEnd = viewStart + track.clientWidth;
+
+    // On wide screens the last few cards can never reach the start edge,
+    // so at the far end keep the current card if it's fully visible.
+    if (viewStart >= max - 4) {
+      const card = cardRefs.current[current];
+      const visible =
+        !!card && card.offsetLeft >= viewStart - 1 && card.offsetLeft + card.offsetWidth <= viewEnd + 1;
+      return visible ? current : TOTAL - 1;
+    }
+
+    const anchor = viewStart + getGutter(track);
+    let nearest = 0;
+    let best = Number.POSITIVE_INFINITY;
+    cardRefs.current.forEach((card, index) => {
+      if (!card) return;
+      const distance = Math.abs(card.offsetLeft - anchor);
+      if (distance < best) {
+        best = distance;
+        nearest = index;
+      }
+    });
+    return nearest;
+  }, []);
+
+  const scrollToIndex = useCallback(
+    (index: number, behavior?: ScrollBehavior) => {
+      const track = trackRef.current;
+      const card = cardRefs.current[index];
+      if (!track || !card) return;
+      track.scrollTo({
+        left: card.offsetLeft - getGutter(track),
+        behavior: behavior ?? (prefersReducedMotion ? 'auto' : 'smooth'),
+      });
+    },
+    [prefersReducedMotion]
+  );
+
+  const move = useCallback(
+    (nextIndex: number) => {
+      if (!TOTAL) return;
+      const normalized = (nextIndex + TOTAL) % TOTAL;
+      setActiveIndex(normalized);
+      scrollToIndex(normalized);
+    },
+    [scrollToIndex]
+  );
+
+  const handleScroll = () => {
+    updateEdges();
+    if (settleTimer.current) window.clearTimeout(settleTimer.current);
+    settleTimer.current = window.setTimeout(() => {
+      if (!drag.current.active) setActiveIndex((current) => resolveIndex(current));
+    }, 120);
+  };
 
   useEffect(() => {
-    if (!isAutoplayEnabled || isPaused || PROJECTS.length < 2) return;
-    const timer = window.setInterval(next, AUTOPLAY_DELAY);
-    return () => window.clearInterval(timer);
-  }, [isAutoplayEnabled, isPaused, next]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowRight') next();
-      if (event.key === 'ArrowLeft') previous();
+    updateEdges();
+    const handleResize = () => {
+      updateEdges();
+      scrollToIndex(activeRef.current, 'auto');
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [next, previous]);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (settleTimer.current) window.clearTimeout(settleTimer.current);
+    };
+  }, [updateEdges, scrollToIndex]);
 
-  if (!PROJECTS.length) return null;
+  /* --------------------------------- autoplay -------------------------------- */
+
+  const canAutoplay =
+    isAutoplayEnabled &&
+    !isHovered &&
+    !isFocused &&
+    !isDragging &&
+    !isTouching &&
+    isInView &&
+    !prefersReducedMotion &&
+    TOTAL > 1;
+
+  // Reset the progress bar whenever the slide changes (runs before the effect below).
+  useEffect(() => {
+    progress.set(0);
+  }, [activeIndex, progress]);
+
+  // Progress-driven autoplay: pausing freezes the bar, resuming continues from where it stopped.
+  useEffect(() => {
+    if (!canAutoplay) return;
+    const remaining = Math.max(0, 1 - progress.get()) * AUTOPLAY_DELAY;
+    const controls = animate(progress, 1, {
+      duration: remaining / 1000,
+      ease: 'linear',
+      onComplete: () => move(activeIndex + 1),
+    });
+    return () => controls.stop();
+  }, [canAutoplay, activeIndex, move, progress]);
+
+  /* --------------------------------- input ---------------------------------- */
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      move(activeIndex + 1);
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      move(activeIndex - 1);
+    }
+  };
+
+  // Mouse-only drag; touch devices use native swipe scrolling.
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0 || !trackRef.current) return;
+    drag.current = {
+      active: true,
+      moved: false,
+      startX: event.clientX,
+      startScroll: trackRef.current.scrollLeft,
+      pointerId: event.pointerId,
+    };
+  };
+
+  const endDrag = () => {
+    const state = drag.current;
+    if (!state.active) return;
+    state.active = false;
+    if (!state.moved) return;
+    const track = trackRef.current;
+    if (track?.hasPointerCapture(state.pointerId)) track.releasePointerCapture(state.pointerId);
+    setIsDragging(false);
+    move(resolveIndex(activeRef.current));
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    const state = drag.current;
+    const track = trackRef.current;
+    if (!state.active || !track) return;
+    if (event.buttons === 0) return endDrag();
+
+    const deltaX = event.clientX - state.startX;
+    // Only start dragging after a small threshold so normal link clicks still work.
+    if (!state.moved && Math.abs(deltaX) > 6) {
+      state.moved = true;
+      track.setPointerCapture(state.pointerId);
+      setIsDragging(true);
+    }
+    if (state.moved) track.scrollLeft = state.startScroll - deltaX;
+  };
+
+  const handleFocus = (event: FocusEvent<HTMLDivElement>) => {
+    if ((event.target as HTMLElement).matches(':focus-visible')) setIsFocused(true);
+  };
+
+  const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsFocused(false);
+  };
+
+  if (!TOTAL) return null;
 
   return (
-    <section
-      id="projects"
-      aria-label="Project showcase"
-      className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117]/90 py-24 sm:py-36"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      <div className="pointer-events-none absolute inset-0 bg-dot-pattern opacity-20" />
-      <div className="relative z-10 mx-auto max-w-[1400px] px-4 sm:px-8 lg:px-12">
-        <div className="mb-12 flex flex-col gap-8 border-b border-[#30363D] pb-8 sm:mb-16 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <div className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-[#3FB950]">
-              <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>SELECTED SYSTEMS // PROJECT SHOWCASE</span>
-            </div>
-            <div className="lg:col-span-8">
-            <h2 className="font-black text-5xl sm:text-7xl md:text-8xl xl:text-[9rem] text-[#C9D1D9] tracking-tighter uppercase leading-[0.88]">
-              PROJECT<br />
-              <span className="text-outline">SHOWCASE.</span>
-            </h2>
-          </div>
-            <p className="mt-5 max-w-xl font-mono text-xs leading-6 text-[#8B949E] sm:text-sm">
-              Selected systems, experiments, and products built across full-stack, frontend, and backend environments.
-            </p>
-          </div>
+    <MotionConfig reducedMotion="user">
+      <section
+        ref={sectionRef}
+        id="projects"
+        aria-label="Project showcase"
+        aria-roledescription="carousel"
+        className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117]/90 py-20 sm:py-28 lg:py-32"
+        onPointerEnter={(event) => event.pointerType === 'mouse' && setIsHovered(true)}
+        onPointerLeave={(event) => event.pointerType === 'mouse' && setIsHovered(false)}
+        onKeyDown={handleKeyDown}
+      >
+        {/* Background layers */}
+        <div className="pointer-events-none absolute inset-0 bg-dot-pattern opacity-20" />
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-48 left-1/2 h-[520px] w-[min(1100px,90vw)] -translate-x-1/2 rounded-full bg-[#3FB950]/10 blur-[120px]"
+          animate={{ opacity: [0.35, 0.7, 0.35] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        />
 
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-sm text-[#C9D1D9]" aria-live="polite">
-              {String(activeIndex + 1).padStart(2, '0')} <span className="text-[#8B949E]">/</span> {String(PROJECTS.length).padStart(2, '0')}
-            </span>
-            <button
-              type="button"
-              onClick={() => setIsAutoplayEnabled((enabled) => !enabled)}
-              aria-label={isAutoplayEnabled ? 'Pause automatic project rotation' : 'Resume automatic project rotation'}
-              className="rounded-lg border border-[#30363D] bg-[#161B22] p-2.5 text-[#8B949E] transition-colors hover:border-[#8B949E] hover:text-[#C9D1D9]"
+        <div className="relative z-10 mx-auto w-full max-w-[1920px]">
+          {/* ------------------------------- Header ------------------------------- */}
+          <div className={GUTTER}>
+            <motion.header
+              variants={headerVariants}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.4 }}
+              className="grid gap-10 border-b border-[#30363D] pb-10 lg:grid-cols-12 lg:items-end lg:gap-x-12"
             >
-              {isAutoplayEnabled ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
-            </button>
-            <button type="button" onClick={previous} aria-label="Previous project" className="rounded-lg border border-[#30363D] bg-[#161B22] p-2.5 text-[#C9D1D9] transition-colors hover:border-[#3FB950] hover:text-[#3FB950]">
-              <ChevronLeft className="h-5 w-5" aria-hidden="true" />
-            </button>
-            <button type="button" onClick={next} aria-label="Next project" className="rounded-lg border border-[#30363D] bg-[#161B22] p-2.5 text-[#C9D1D9] transition-colors hover:border-[#3FB950] hover:text-[#3FB950]">
-              <ChevronRight className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
+              <div className="lg:col-span-8">
+                <motion.div
+                  variants={riseVariants}
+                  className="mb-5 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-[#3FB950]"
+                >
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3FB950] opacity-60" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#3FB950]" />
+                  </span>
+                  <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span>Selected Systems // Project Showcase</span>
+                </motion.div>
 
-        <div
-          ref={trackRef}
-          className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-1 pb-5"
-          tabIndex={0}
-          onFocus={() => setIsPaused(true)}
-          onBlur={() => setIsPaused(false)}
-          aria-label="Horizontal project carousel"
-          onScroll={() => {
-            if (!trackRef.current) return;
-            const nearestIndex = cardRefs.current.reduce((closest, card, index) => {
-              if (!card || !trackRef.current) return closest;
-              const currentDistance = Math.abs(card.offsetLeft - trackRef.current.scrollLeft);
-              const closestCard = cardRefs.current[closest];
-              const closestDistance = closestCard
-                ? Math.abs(closestCard.offsetLeft - trackRef.current.scrollLeft)
-                : Number.POSITIVE_INFINITY;
-              return currentDistance < closestDistance ? index : closest;
-            }, 0);
-            setActiveIndex(nearestIndex);
-          }}
-          onPointerDown={(event) => {
-            if (!trackRef.current) return;
-            dragState.current = {
-              active: true,
-              startX: event.clientX,
-              startScrollLeft: trackRef.current.scrollLeft
-            };
-            trackRef.current.setPointerCapture(event.pointerId);
-            setIsPaused(true);
-          }}
-          onPointerMove={(event) => {
-            if (!dragState.current.active || !trackRef.current) return;
-            trackRef.current.scrollLeft =
-              dragState.current.startScrollLeft - (event.clientX - dragState.current.startX);
-          }}
-          onPointerUp={(event) => {
-            dragState.current.active = false;
-            trackRef.current?.releasePointerCapture(event.pointerId);
-            setIsPaused(false);
-          }}
-          onPointerCancel={() => {
-            dragState.current.active = false;
-            setIsPaused(false);
-          }}
-        >
-          {PROJECTS.map((project, index) => (
+                <h2 className="text-5xl font-black uppercase leading-[0.88] tracking-tighter text-[#C9D1D9] sm:text-7xl lg:text-8xl 2xl:text-[8.5rem]">
+                  <span className="block overflow-hidden pb-[0.06em]">
+                    <motion.span variants={lineVariants} className="block">
+                      Project
+                    </motion.span>
+                  </span>
+                  <span className="block overflow-hidden pb-[0.06em]">
+                    <motion.span variants={lineVariants} className="text-outline block">
+                      Showcase.
+                    </motion.span>
+                  </span>
+                </h2>
+              </div>
+
+              <div className="flex flex-col gap-8 lg:col-span-4 lg:items-end">
+                <motion.p
+                  variants={riseVariants}
+                  className="max-w-md font-mono text-xs leading-6 text-[#8B949E] sm:text-sm lg:text-right"
+                >
+                  Selected systems, experiments, and products built across full-stack, frontend, and backend
+                  environments.
+                </motion.p>
+
+                <motion.div variants={riseVariants} className="flex items-center gap-3">
+                  <div
+                    className="mr-2 flex items-baseline gap-1.5 font-mono text-sm tabular-nums"
+                    aria-live={canAutoplay ? 'off' : 'polite'}
+                    aria-atomic="true"
+                  >
+                    <span className="relative inline-flex h-5 overflow-hidden text-[#C9D1D9]">
+                      <AnimatePresence mode="popLayout" initial={false}>
+                        <motion.span
+                          key={activeIndex}
+                          initial={{ y: '100%', opacity: 0 }}
+                          animate={{ y: '0%', opacity: 1 }}
+                          exit={{ y: '-100%', opacity: 0 }}
+                          transition={{ duration: 0.35, ease: EASE }}
+                        >
+                          {pad(activeIndex + 1)}
+                        </motion.span>
+                      </AnimatePresence>
+                    </span>
+                    <span className="text-[#8B949E]">/ {pad(TOTAL)}</span>
+                  </div>
+
+                  <ControlButton
+                    label={isAutoplayEnabled ? 'Pause automatic project rotation' : 'Resume automatic project rotation'}
+                    onClick={() => setIsAutoplayEnabled((enabled) => !enabled)}
+                  >
+                    {isAutoplayEnabled ? (
+                      <Pause className="h-4 w-4" aria-hidden="true" />
+                    ) : (
+                      <Play className="h-4 w-4" aria-hidden="true" />
+                    )}
+                  </ControlButton>
+                  <ControlButton label="Previous project" onClick={() => move(activeIndex - 1)} accent>
+                    <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+                  </ControlButton>
+                  <ControlButton label="Next project" onClick={() => move(activeIndex + 1)} accent>
+                    <ChevronRight className="h-5 w-5" aria-hidden="true" />
+                  </ControlButton>
+                </motion.div>
+              </div>
+            </motion.header>
+          </div>
+
+          {/* ------------------------------- Track -------------------------------- */}
+          <div className="relative mt-10 sm:mt-14">
             <div
-              key={project.id}
-              ref={(element) => {
-                cardRefs.current[index] = element;
-              }}
-              onMouseEnter={() => setActiveIndex(index)}
-              className={`w-[min(86vw,540px)] shrink-0 snap-center transition-all duration-300 ${
-                activeIndex === index ? 'scale-[1.01]' : 'opacity-85 hover:opacity-100'
+              aria-hidden="true"
+              className={`pointer-events-none absolute inset-y-0 left-0 z-20 w-12 bg-gradient-to-r from-[#0D1117] to-transparent transition-opacity duration-300 sm:w-24 ${
+                edges.start ? 'opacity-100' : 'opacity-0'
               }`}
-            >
-              <ProjectCard project={project} isActive={activeIndex === index} />
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 flex justify-center gap-2" role="tablist" aria-label="Project slides">
-          {PROJECTS.map((project, index) => (
-            <button
-              key={project.id}
-              type="button"
-              role="tab"
-              aria-selected={index === activeIndex}
-              aria-label={`Show ${project.title}`}
-              onClick={() => move(index)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${index === activeIndex ? 'w-10 bg-[#3FB950]' : 'w-2 bg-[#30363D] hover:bg-[#8B949E]'}`}
             />
-          ))}
+            <div
+              aria-hidden="true"
+              className={`pointer-events-none absolute inset-y-0 right-0 z-20 w-12 bg-gradient-to-l from-[#0D1117] to-transparent transition-opacity duration-300 sm:w-24 ${
+                edges.end ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+
+            <motion.div
+              ref={trackRef}
+              variants={trackVariants}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.2 }}
+              tabIndex={0}
+              aria-label="Horizontal project carousel"
+              className={`no-scrollbar relative flex gap-5 overflow-x-auto overscroll-x-contain py-4 outline-none ${GUTTER} ${SCROLL_GUTTER} ${
+                isDragging ? 'cursor-grabbing select-none' : 'cursor-grab snap-x snap-mandatory'
+              }`}
+              onScroll={handleScroll}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={endDrag}
+              onPointerCancel={endDrag}
+              onTouchStart={() => setIsTouching(true)}
+              onTouchEnd={() => setIsTouching(false)}
+              onTouchCancel={() => setIsTouching(false)}
+              onClickCapture={(event) => {
+                // Swallow the click that ends a drag so links don't open accidentally.
+                if (drag.current.moved) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  drag.current.moved = false;
+                }
+              }}
+            >
+              {PROJECTS.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  ref={(element) => {
+                    cardRefs.current[index] = element;
+                  }}
+                  variants={cardVariants}
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`${index + 1} of ${TOTAL}: ${project.title}`}
+                  onMouseEnter={() => setActiveIndex(index)}
+                  className="w-[80vw] max-w-[380px] shrink-0 snap-start sm:w-[360px] 2xl:w-[380px]"
+                >
+                  <ProjectCard project={project} index={index} isActive={activeIndex === index} />
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ---------------------------- Pagination ----------------------------- */}
+          <div className={`mt-6 flex items-center justify-center gap-1 ${GUTTER}`}>
+            {PROJECTS.map((project, index) => {
+              const isActive = index === activeIndex;
+              return (
+                <button
+                  key={project.id}
+                  type="button"
+                  onClick={() => move(index)}
+                  aria-label={`Show ${project.title}`}
+                  aria-current={isActive ? 'true' : undefined}
+                  className="group px-1 py-3"
+                >
+                  <span
+                    className={`relative block h-1.5 overflow-hidden rounded-full bg-[#30363D] transition-[width,background-color] duration-500 group-hover:bg-[#8B949E] ${
+                      isActive ? 'w-12' : 'w-2'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        className="absolute inset-0 origin-left rounded-full bg-[#3FB950]"
+                        style={{ scaleX: isAutoplayEnabled && !prefersReducedMotion ? progress : 1 }}
+                      />
+                    )}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-[#8B949E]">
+            Drag, swipe, use arrow keys or the controls to explore
+          </p>
         </div>
-        <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-[#8B949E]">
-          Drag, swipe, or use the controls to explore
-        </p>
-      </div>
-    </section>
+      </section>
+    </MotionConfig>
   );
 };
