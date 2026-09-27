@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Mail, Github, Linkedin, FileText, Copy, Check, Send, ShieldCheck } from 'lucide-react';
+import { ScrollReveal } from '../animations/ScrollReveal';
 
 interface ContactSectionProps {
   onOpenResume: () => void;
@@ -21,6 +22,7 @@ const channelBtnClass =
   'flex items-center justify-center gap-1.5 py-2.5 bg-[#0D1117] hover:bg-[#21262D] border border-[#30363D] mono text-[11px] rounded-lg transition-all cursor-pointer';
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) => {
+  const prefersReducedMotion = useReducedMotion();
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
@@ -65,7 +67,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
 
       <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         {/* Eyebrow */}
-        <div className="flex items-center justify-between border-b border-[#30363D] pb-3 mb-10">
+        <ScrollReveal className="flex items-center justify-between border-b border-[#30363D] pb-3 mb-10">
           <div className="flex items-center gap-3 text-[#3FB950] mono text-xs tracking-[0.3em] uppercase">
             <span className="w-2 h-2 rounded-full bg-[#3FB950] inline-block" />
             <span>[ 06 // INITIATE TRANSMISSION &amp; CONTRACTS ]</span>
@@ -73,10 +75,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
           <span className="hidden sm:inline-block mono text-[10px] text-[#8B949E] uppercase tracking-widest">
             DIRECT ENGAGEMENT &bull; SLA &lt; 24H
           </span>
-        </div>
+        </ScrollReveal>
 
         {/* Headline row — full width so the 6rem headline fits */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 border-b border-[#30363D] pb-10 mb-10">
+        <ScrollReveal delay={0.06} className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 border-b border-[#30363D] pb-10 mb-10">
           <h2 className="font-black text-5xl sm:text-7xl lg:text-[7rem] text-[#C9D1D9] tracking-tighter leading-[0.88] uppercase">
             LET&apos;S BUILD
             <br />
@@ -91,22 +93,24 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
               backend services, and high-impact software engineering projects.
             </p>
 
-            <button
+            <motion.button
               onClick={handleCopyEmail}
               id="contact-email-btn"
+              whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
+              whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
               className="self-start inline-flex items-center gap-3 px-6 py-3.5 bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] mono text-xs tracking-wider font-black rounded-xl transition-all duration-200 cursor-pointer shadow-xl shadow-[#3FB950]/20 active:scale-95"
             >
               <Mail className="w-4 h-4" />
               <span>{copiedEmail ? 'COPIED TO CLIPBOARD' : 'COPY DIRECT EMAIL'}</span>
               {copiedEmail ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4 opacity-75" />}
-            </button>
+            </motion.button>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Main two-column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* ---------- LEFT: Channels ---------- */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
+          <ScrollReveal className="lg:col-span-5 flex flex-col gap-6" amount={0.1}>
             {/* Direct channels card */}
             <div className="p-5 sm:p-6 bg-[#161B22] border border-[#30363D] rounded-2xl space-y-4">
               <div className="flex items-center justify-between border-b border-[#30363D] pb-3">
@@ -160,10 +164,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
                 </button>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* ---------- RIGHT: Inquiry form ---------- */}
-          <div className="lg:col-span-7 bg-[#161B22] border border-[#30363D] rounded-2xl p-5 sm:p-8 shadow-2xl">
+          <ScrollReveal delay={0.08} className="lg:col-span-7 bg-[#161B22] border border-[#30363D] rounded-2xl p-5 sm:p-8 shadow-2xl" amount={0.1}>
             <div className="flex items-center justify-between gap-3 border-b border-[#30363D] pb-4 mb-6">
               <span className="font-mono text-xs text-white font-bold tracking-widest uppercase">
                 ENGINEERING INQUIRY FORM
@@ -267,7 +271,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </ScrollReveal>
         </div>
 
         {/* Footer bar */}

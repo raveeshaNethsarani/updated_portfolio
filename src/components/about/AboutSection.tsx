@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { ScrollReveal } from '../animations/ScrollReveal';
 import {
   Terminal,
   Cpu,
@@ -30,12 +30,12 @@ export const AboutSection: React.FC = () => {
       <div className="relative z-10 mx-auto w-full max-w-[1920px] px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
         
         {/* Section Header */}
-        <div className="mb-16 flex items-center justify-between border-b border-[#30363D] pb-4 lg:mb-24">
+        <ScrollReveal className="mb-16 flex items-center justify-between border-b border-[#30363D] pb-4 lg:mb-24">
           <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#3FB950] sm:text-xs sm:tracking-[0.3em]">
             <span className="inline-block h-2 w-2 rounded-full bg-[#3FB950]" />
             <span>[ 03 // ENGINEERING BIOGRAPHY &amp; METHODOLOGY ]</span>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Main Editorial Layout */}
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20 xl:gap-28">
@@ -45,12 +45,13 @@ export const AboutSection: React.FC = () => {
           ========================================================== */}
           <div className="lg:col-span-7">
             <div className="lg:sticky lg:top-24">
-              <div className="mb-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8B949E]">
+              <ScrollReveal className="mb-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8B949E]">
                 <Terminal className="h-3.5 w-3.5 text-[#3FB950]" />
                 <span>IDENTITY / ENGINEERING MINDSET</span>
-              </div>
+              </ScrollReveal>
 
-              <h2 className="font-black uppercase leading-[0.82] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] 2xl:text-[7rem]">
+              <ScrollReveal delay={0.06}>
+                <h2 className="font-black uppercase leading-[0.82] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] 2xl:text-[7rem]">
                 ENGINEER
                 <br />
 
@@ -63,10 +64,11 @@ export const AboutSection: React.FC = () => {
                 <span className="text-[#3FB950]">
                   IN  SYSTEMS.
                 </span>
-              </h2>
+                </h2>
+              </ScrollReveal>
 
               {/* Small technical line */}
-              <div className="mt-10 flex max-w-xl items-start gap-4 border-l border-[#3FB950] pl-5">
+              <ScrollReveal delay={0.12} className="mt-10 flex max-w-xl items-start gap-4 border-l border-[#3FB950] pl-5">
                 <Zap className="mt-0.5 h-4 w-4 shrink-0 text-[#3FB950]" />
 
                 <p className="font-mono text-xs leading-relaxed text-[#8B949E] sm:text-sm text-justify">
@@ -74,7 +76,7 @@ export const AboutSection: React.FC = () => {
                   I approach software as a connected system rather than
                   a collection of isolated features.
                 </p>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
 
@@ -82,7 +84,7 @@ export const AboutSection: React.FC = () => {
               RIGHT — BIOGRAPHY + CREDENTIALS + QUOTE
           ========================================================== */}
           <div className="lg:col-span-5">
-            <div className="space-y-10">
+            <ScrollReveal delay={0.08} className="space-y-10">
 
               {/* Biography */}
               <div className="space-y-6 text-[#C9D1D9]/90 ">
@@ -148,7 +150,7 @@ export const AboutSection: React.FC = () => {
                   <span>Raveesha Nethsarani Siriwardana</span>
                 </div>
               </div> */}
-            </div>
+            </ScrollReveal>
 
             
           </div>
@@ -160,7 +162,7 @@ export const AboutSection: React.FC = () => {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 max-w-[1920px] mx-auto pt-10 px-25">
 
                 {/* Work */}
-                <div className="group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#3FB950]/50">
+                <ScrollReveal delay={0.05} className="group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#3FB950]/50">
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-wider text-[#3FB950]">
                       <Briefcase className="h-3.5 w-3.5" />
@@ -179,10 +181,10 @@ export const AboutSection: React.FC = () => {
                   <p className="mt-1 font-mono text-[11px] text-[#8B949E]">
                     BotCalm (Pvt) Ltd · Sri Lanka
                   </p>
-                </div>
+                </ScrollReveal>
 
                 {/* Education */}
-                <div className="group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#58A6FF]/50">
+                <ScrollReveal delay={0.12} className="group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#58A6FF]/50">
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-wider text-[#58A6FF]">
                       <GraduationCap className="h-3.5 w-3.5" />
@@ -201,10 +203,9 @@ export const AboutSection: React.FC = () => {
                   <p className="mt-1 font-mono text-[11px] text-[#8B949E]">
                     SLIATE Galle · IT Department
                   </p>
-                </div>
+                </ScrollReveal>
 
               </div>
     </section>
   );
 };
-

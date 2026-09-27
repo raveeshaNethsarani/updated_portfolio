@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, MotionConfig, type Variants } from 'motion/react';
 import {
   Compass,
   Cpu,
@@ -15,6 +15,41 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const sectionReveal: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.04 } }
+};
+
+const headerReveal: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } }
+};
+
+const fadeUpReveal: Variants = {
+  hidden: { opacity: 0, y: 14, scale: 0.995 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+  }
+};
+
+const stepsReveal: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.055, delayChildren: 0.02 } }
+};
+
+const stepReveal: Variants = {
+  hidden: { opacity: 0, y: 8, scale: 0.99 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] }
+  }
+};
 
 interface BuildStep {
   number: string;
@@ -209,55 +244,79 @@ export const HowIBuild: React.FC = () => {
   };
 
   return (
-    <section
-      id="how-i-build"
-      ref={sectionRef}
-      className="relative bg-[#0D1117] border-b border-[#30363D]/80"
-      style={{ minHeight: isDesktopPinned ? '350vh' : 'auto' }}
-    >
-      <div
-        ref={pinRef}
-        className={`w-full flex flex-col justify-between py-16 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-[1920px] mx-auto overflow-hidden select-none ${
-          isDesktopPinned ? 'h-screen sticky top-0' : 'min-h-[85vh]'
-        }`}
+    <MotionConfig reducedMotion="user">
+      <section
+        id="how-i-build"
+        ref={sectionRef}
+        className="relative bg-[#0D1117] border-b border-[#30363D]/80"
+        style={{ minHeight: isDesktopPinned ? '350vh' : 'auto' }}
       >
-        {/* Background Grid Pattern */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
+        <motion.div
+          ref={pinRef}
+          variants={sectionReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className={`w-full flex flex-col justify-between py-16 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-[1920px] mx-auto overflow-hidden select-none ${
+            isDesktopPinned ? 'h-screen sticky top-0' : 'min-h-[85vh]'
+          }`}
+        >
+          {/* Background Grid Pattern */}
+          <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
 
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#30363D] pb-6 relative z-10">
-          <div>
-            <div className="flex items-center gap-2 text-[#3FB950] mono text-xs tracking-widest uppercase mb-2">
-              <Terminal className="w-3.5 h-3.5" />
-              <span>ENGINEERING METHODOLOGY // PIPELINE</span>
+          {/* Section Header */}
+          <motion.div
+            variants={headerReveal}
+            className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#30363D] pb-6 relative z-10"
+          >
+            <div>
+              <motion.div
+                variants={fadeUpReveal}
+                className="flex items-center gap-2 text-[#3FB950] mono text-xs tracking-widest uppercase mb-2"
+              >
+                <Terminal className="w-3.5 h-3.5" />
+                <span>ENGINEERING METHODOLOGY // PIPELINE</span>
+              </motion.div>
+              <motion.h2
+                variants={fadeUpReveal}
+                className="text-3xl sm:text-5xl font-black text-[#C9D1D9] tracking-tight uppercase"
+              >
+                HOW I BUILD
+              </motion.h2>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#C9D1D9] tracking-tight uppercase">
-              HOW I BUILD
-            </h2>
-          </div>
 
-          <div className="flex items-center gap-4 font-mono text-xs text-[#8B949E]">
-            <span>STEP {activeStep.number} OF 07</span>
-            <div className="w-24 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#3FB950] transition-all duration-300"
-                style={{ width: `${((activeStepIdx + 1) / BUILD_STEPS.length) * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
+            <motion.div
+              variants={fadeUpReveal}
+              className="flex items-center gap-4 font-mono text-xs text-[#8B949E]"
+            >
+              <span>STEP {activeStep.number} OF 07</span>
+              <div className="w-24 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-[#3FB950] transition-all duration-300"
+                  style={{ width: `${((activeStepIdx + 1) / BUILD_STEPS.length) * 100}%` }}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
 
         {/* Main Interactive Stage Display */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto relative z-10 py-6">
+        <motion.div
+          variants={fadeUpReveal}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto relative z-10 py-6"
+        >
           {/* Left Column: Vertical Step Ribbon / Stepper */}
-          <div className="lg:col-span-4 flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 no-scrollbar">
+          <motion.div
+            variants={stepsReveal}
+            className="lg:col-span-4 flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 no-scrollbar"
+          >
             {BUILD_STEPS.map((step, idx) => {
               const isActive = idx === activeStepIdx;
               const isPast = idx < activeStepIdx;
 
               return (
-                <button
+                <motion.button
                   key={step.number}
+                  variants={stepReveal}
                   onClick={() => setActiveStepIdx(idx)}
                   id={`step-nav-btn-${step.number}`}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-mono text-xs text-left transition-all duration-200 cursor-pointer whitespace-nowrap ${
@@ -285,10 +344,10 @@ export const HowIBuild: React.FC = () => {
                   {isActive && (
                     <ArrowRight className="w-3.5 h-3.5 text-[#3FB950] ml-auto hidden lg:block" />
                   )}
-                </button>
+                </motion.button>
               );
             })}
-          </div>
+          </motion.div>
 
           {/* Right Column: Active Stage Cinematic Detail Card */}
           <div className="lg:col-span-8">
@@ -384,7 +443,7 @@ export const HowIBuild: React.FC = () => {
               </motion.div>
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         {/* Bottom Timeline Progress Ribbon */}
         {/* <div className="border-t border-[#30363D] pt-4 flex flex-wrap items-center justify-between text-xs font-mono text-[#8B949E]">
@@ -393,7 +452,8 @@ export const HowIBuild: React.FC = () => {
             <span>{isDesktopPinned ? 'CONTINUOUS CYCLE: SCROLL DOWN TO PROGRESS' : 'ENGINEERING ITERATION CYCLE'}</span>
           </div>
       </div> */}
-      </div>
-    </section>
+        </motion.div>
+      </section>
+    </MotionConfig>
   );
 };

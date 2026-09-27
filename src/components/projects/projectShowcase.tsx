@@ -294,7 +294,7 @@ export const ProjectShowcase = () => {
     <MotionConfig reducedMotion="user">
       <section
         ref={sectionRef}
-        id="projects"
+        id="work"
         aria-label="Project showcase"
         aria-roledescription="carousel"
         className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117]/90 py-20 sm:py-28 lg:py-32"
@@ -311,7 +311,7 @@ export const ProjectShowcase = () => {
           transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
         />
 
-        <div className="relative z-10 mx-auto w-full max-w-[1920px]">
+        <div id="projects" className="relative z-10 mx-auto w-full max-w-[1920px] scroll-mt-20">
           {/* ------------------------------- Header ------------------------------- */}
           <div className={GUTTER}>
             <motion.header
