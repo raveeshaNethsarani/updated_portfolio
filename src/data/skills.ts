@@ -4,7 +4,7 @@ export const SKILLS_DATA: SkillCategory[] = [
   {
     id: 'frontend',
     title: 'FRONTEND',
-    description: 'Modern, high-performance user interfaces and responsive architectures.',
+    description: 'High-performance UIs and responsive architectures.',
     skills: [
       { name: 'React.js', level: 'Advanced', highlight: true, notes: 'Hooks, Suspense, Performance Optimization' },
       { name: 'Next.js', level: 'Advanced', highlight: true, notes: 'App Router, Server Components, SSR/SSG' },
@@ -20,31 +20,26 @@ export const SKILLS_DATA: SkillCategory[] = [
   },
   {
     id: 'state-data',
-    title: 'STATE & DATA',
-    description: 'Predictable client-state management and server-state caching.',
+    title: 'STATE, DATA & FORMS',
+    description: 'Client state, server-state caching and runtime-validated forms.',
     skills: [
       { name: 'Zustand', level: 'Advanced', highlight: true, notes: 'Lightweight Store, Middleware, Multi-tab sync' },
       { name: 'TanStack Query', level: 'Advanced', highlight: true, notes: 'Cache Invalidation, Optimistic Updates' },
-      { name: 'Context API', level: 'Advanced', notes: 'Scoped State, Provider Composition' }
-    ]
-  },
-  {
-    id: 'forms',
-    title: 'FORMS & VALIDATION',
-    description: 'Strict runtime data contracts and resilient form handling.',
-    skills: [
+      { name: 'Context API', level: 'Advanced', notes: 'Scoped State, Provider Composition' },
+      { name: 'Axios', level: 'Advanced', notes: 'Interceptors, Timeout AbortController, Retry logic' },
       { name: 'React Hook Form', level: 'Advanced', highlight: true, notes: 'Uncontrolled Performance, Dynamic Fields' },
       { name: 'Zod', level: 'Advanced', highlight: true, notes: 'Schema Inferences, Runtime Contract Guards' }
     ]
   },
   {
     id: 'backend',
-    title: 'BACKEND',
-    description: 'Scalable server runtime, enterprise service layers, and high-throughput APIs.',
+    title: 'BACKEND & APIs',
+    description: 'Scalable server runtimes, service layers and API contracts.',
     skills: [
       { name: 'Node.js', level: 'Advanced', highlight: true, notes: 'Event Loop, Buffers, Streams, Cluster Module' },
       { name: 'Express.js', level: 'Advanced', highlight: true, notes: 'Middleware Chaining, Security Headers, Error Handlers' },
-      { name: 'REST APIs', level: 'Expert', highlight: true, notes: 'Resource Modeling, Idempotency, Rate Limiting' },
+      { name: 'REST APIs', level: 'Expert', highlight: true, notes: 'Resource Modeling, Idempotency, Contract Consumption' },
+      { name: 'Third-Party API Integration', level: 'Advanced', highlight: true, notes: 'Payment Gateways, Webhook Handlers' },
       { name: 'Java', level: 'Intermediate', notes: 'OOP Principles, Concurrency, JVM Internals' },
       { name: 'Spring Boot', level: 'Intermediate', notes: 'Dependency Injection, Spring MVC, JPA' },
       { name: 'Go', level: 'Exploring / Practical', highlight: true, notes: 'Goroutines, Channels, Standard Library HTTP' }
@@ -52,20 +47,22 @@ export const SKILLS_DATA: SkillCategory[] = [
   },
   {
     id: 'databases',
-    title: 'DATABASES',
-    description: 'Relational ACID integrity and document-oriented flexibility.',
+    title: 'DATABASES & STORAGE',
+    description: 'Relational integrity, document stores and media/object storage.',
     skills: [
       { name: 'MongoDB', level: 'Advanced', highlight: true, notes: 'Document Modeling, Aggregation Pipelines' },
       { name: 'Mongoose', level: 'Advanced', notes: 'Schema Middleware, Population, Validation' },
+      { name: 'MongoDB Atlas', level: 'Advanced', notes: 'Cluster Provisioning, VPC Peering, Backups' },
       { name: 'PostgreSQL', level: 'Advanced', highlight: true, notes: 'Indexing, Constraints, Transactions, JSONB' },
       { name: 'Prisma', level: 'Advanced', notes: 'Type-Safe Queries, Migrations, Relations' },
-      { name: 'MongoDB Atlas', level: 'Advanced', notes: 'Cluster Provisioning, VPC Peering, Backups' }
+      { name: 'Cloudinary', level: 'Advanced', highlight: true, notes: 'On-the-fly Image Transformations & Delivery' },
+      { name: 'AWS S3', level: 'Intermediate', highlight: true, notes: 'Presigned Upload URLs, Bucket Policies, Lifecycle' }
     ]
   },
   {
     id: 'auth-security',
-    title: 'AUTHENTICATION & SECURITY',
-    description: 'Defense-in-depth token security, encryption, and permission models.',
+    title: 'AUTH & SECURITY',
+    description: 'Token security, identity providers and permission models.',
     skills: [
       { name: 'JWT', level: 'Advanced', highlight: true, notes: 'Signed Claims, Refresh Token Rotation, Blacklists' },
       { name: 'Firebase Authentication', level: 'Advanced', notes: 'OAuth Providers, Custom Claims, Session Cookies' },
@@ -76,69 +73,36 @@ export const SKILLS_DATA: SkillCategory[] = [
   },
   {
     id: 'real-time',
-    title: 'REAL-TIME & COMMUNICATION',
-    description: 'Bi-directional protocols, push communication, and event dispatchers.',
+    title: 'REAL-TIME & MESSAGING',
+    description: 'Bi-directional protocols, events, email and user alerts.',
     skills: [
       { name: 'Socket.IO', level: 'Advanced', highlight: true, notes: 'Rooms, Namespaces, Heartbeats, Reconnection' },
       { name: 'WebSockets', level: 'Advanced', highlight: true, notes: 'Raw WS Protocols, Frame Handling, Binary Streams' },
       { name: 'Webhooks', level: 'Advanced', highlight: true, notes: 'Idempotency Keys, Retry Queues, Signature Verification' },
-      { name: 'Event-Driven Architecture', level: 'Practical', highlight: true, notes: 'Pub/Sub Patterns, Decoupled Listeners' }
-    ]
-  },
-  {
-    id: 'api-integration',
-    title: 'API & INTEGRATION',
-    description: 'Resilient client-side transport and external cloud provider bindings.',
-    skills: [
-      { name: 'Axios', level: 'Advanced', notes: 'Interceptors, Timeout AbortController, Retry logic' },
-      { name: 'REST API Integration', level: 'Expert', highlight: true, notes: 'Contract Consumption, Rate Limiting' },
-      { name: 'Third-Party API Integration', level: 'Advanced', highlight: true, notes: 'Payment Gateways, Webhook Handlers' }
-    ]
-  },
-  {
-    id: 'email-notifications',
-    title: 'EMAIL & NOTIFICATIONS',
-    description: 'Transactional mail transport, web push, and user alerts.',
-    skills: [
-      { name: 'Nodemailer', level: 'Advanced', notes: 'SMTP Pooling, HTML Templates, Attachment Streams' },
-      { name: 'EmailJS', level: 'Advanced', notes: 'Client-side SMTP dispatch with templating' },
+      { name: 'Event-Driven Architecture', level: 'Practical', highlight: true, notes: 'Pub/Sub Patterns, Decoupled Listeners' },
       { name: 'Real-Time Notifications', level: 'Advanced', highlight: true, notes: 'WebSocket & Server-Sent Event streaming' },
-      { name: 'Toast Notifications', level: 'Advanced', notes: 'Optimistic UI alerts and action prompts' }
-    ]
-  },
-  {
-    id: 'file-cloud',
-    title: 'FILE & CLOUD SERVICES',
-    description: 'Binary object storage, media optimization, and CDN delivery.',
-    skills: [
-      { name: 'Cloudinary', level: 'Advanced', highlight: true, notes: 'On-the-fly Image Transformations & Delivery' },
-      { name: 'AWS S3', level: 'Intermediate', highlight: true, notes: 'Presigned Upload URLs, Bucket Policies, Lifecycle' }
-    ]
-  },
-  {
-    id: 'testing',
-    title: 'TESTING',
-    description: 'Unit, contract, and snapshot testing for regression prevention.',
-    skills: [
-      { name: 'Jest', level: 'Intermediate', highlight: true, notes: 'Unit Tests, Mocking, Snapshot Assertions' }
+      { name: 'Toast Notifications', level: 'Advanced', notes: 'Optimistic UI alerts and action prompts' },
+      { name: 'Nodemailer', level: 'Advanced', notes: 'SMTP Pooling, HTML Templates, Attachment Streams' },
+      { name: 'EmailJS', level: 'Advanced', notes: 'Client-side SMTP dispatch with templating' }
     ]
   },
   {
     id: 'devops',
-    title: 'DEVOPS & DEPLOYMENT',
-    description: 'Continuous integration, containerized workloads, and hosting pipelines.',
+    title: 'DEVOPS & TESTING',
+    description: 'Version control, CI/CD, containers, hosting and tests.',
     skills: [
       { name: 'Git', level: 'Advanced', notes: 'Rebase, Cherry-Pick, Branching Workflows' },
       { name: 'GitHub', level: 'Advanced', notes: 'Actions CI/CD, Issue Tracking, Releases' },
       { name: 'Docker', level: 'Intermediate', highlight: true, notes: 'Multi-stage builds, Container Networking, Compose' },
       { name: 'Vercel', level: 'Advanced', notes: 'Edge Functions, Serverless Deployment' },
-      { name: 'Netlify', level: 'Intermediate', notes: 'Static Hosting, Redirect Rules' }
+      { name: 'Netlify', level: 'Intermediate', notes: 'Static Hosting, Redirect Rules' },
+      { name: 'Jest', level: 'Intermediate', highlight: true, notes: 'Unit Tests, Mocking, Snapshot Assertions' }
     ]
   },
   {
     id: 'development-tools',
-    title: 'DEVELOPMENT TOOLS',
-    description: 'Developer experience, static analysis, and interface design inspection.',
+    title: 'DEV TOOLS',
+    description: 'Developer experience, static analysis and design handoff.',
     skills: [
       { name: 'VS Code', level: 'Expert', notes: 'Custom Configs, Remote Containers' },
       { name: 'Postman', level: 'Advanced', notes: 'API Mocking, Automated Collections, Environment Variables' },
