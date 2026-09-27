@@ -1,6 +1,8 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   motion,
+  useAnimationControls,
+  useInView,
   useScroll,
   useTransform,
   useSpring,
@@ -11,11 +13,37 @@ import raveeshaPortrait from '../../assets/images/Gemini_Generated_Image_31tv6r3
 
 interface HeroSectionProps {
   onOpenResume: () => void;
+  homeNavigationCount: number;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({
+  onOpenResume,
+  homeNavigationCount,
+}) => {
   const containerRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const heroEntranceControls = useAnimationControls();
+  const isHeroInView = useInView(containerRef, { amount: 0.5 });
+  const handledHomeNavigation = useRef(homeNavigationCount);
+
+  useEffect(() => {
+    if (homeNavigationCount === handledHomeNavigation.current || !isHeroInView) return;
+
+    handledHomeNavigation.current = homeNavigationCount;
+    if (shouldReduceMotion) return;
+
+    void heroEntranceControls.start({
+      opacity: [0.96, 1],
+      y: [8, 0],
+      scale: [0.995, 1],
+      transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+    });
+  }, [
+    homeNavigationCount,
+    isHeroInView,
+    shouldReduceMotion,
+    heroEntranceControls,
+  ]);
 
   // Mouse Parallax (Desktop)
   const mouseSpringX = useSpring(0, {
@@ -72,9 +100,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume }) => {
   );
 
   return (
-    <section
+    <motion.section
       id="hero"
       ref={containerRef}
+      initial={false}
+      animate={heroEntranceControls}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="relative min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-12 px-4 sm:px-8 lg:px-12 max-w-[1920px] mx-auto overflow-hidden border-b border-[#30363D]"
@@ -376,6 +406,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenResume }) => {
         </div>
       </motion.div>
       */}
-    </section>
+    </motion.section>
   );
 };

@@ -22,6 +22,7 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
   const [commandBarOpen, setCommandBarOpen] = useState(false);
+  const [heroNavigationCount, setHeroNavigationCount] = useState(0);
 
   // Global shortcut to trigger command palette: Cmd+K / Ctrl+K or "/"
   useEffect(() => {
@@ -58,10 +59,14 @@ export default function App() {
         <FloatingNav
           onOpenResume={() => setResumeModalOpen(true)}
           onOpenTerminal={() => setCommandBarOpen(true)}
+          onNavigateHome={() => setHeroNavigationCount((count) => count + 1)}
         />
 
         {/* 1. Full-screen Editorial Hero */}
-        <HeroSection onOpenResume={() => setResumeModalOpen(true)} />
+        <HeroSection
+          onOpenResume={() => setResumeModalOpen(true)}
+          homeNavigationCount={heroNavigationCount}
+        />
 
         {/* 2. Parallax Typography Marquee */}
         <ParallaxTypography />

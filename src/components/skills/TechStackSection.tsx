@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
+import { ScrollReveal } from '../animations/ScrollReveal';
 import { Search, X } from 'lucide-react';
 import { SKILLS_DATA } from '../../data/skills';
 import { TechIcon } from './TechIcons';
@@ -66,7 +67,7 @@ export const TechStackSection: React.FC = () => {
 
       <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         {/* Eyebrow */}
-        <div className="flex items-center justify-between border-b border-[#30363D] pb-3 mb-8">
+        <ScrollReveal className="flex items-center justify-between border-b border-[#30363D] pb-3 mb-8">
           <div className="flex items-center gap-3 text-[#3FB950] mono text-xs tracking-[0.3em] uppercase">
             <span className="w-2 h-2 rounded-full bg-[#3FB950] inline-block" />
             <span>[ 05 // SYSTEM TOOLCHAIN &amp; RUNTIME CONTRACTS ]</span>
@@ -74,10 +75,10 @@ export const TechStackSection: React.FC = () => {
           <span className="hidden sm:inline-block mono text-[10px] text-[#8B949E] uppercase tracking-widest">
             STRICT TYPE SAFETY &bull; PRODUCTION PROVEN
           </span>
-        </div>
+        </ScrollReveal>
 
         {/* Header — single horizontal row */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-8">
+        <ScrollReveal delay={0.06} className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-8">
           <h2 className="font-black text-4xl sm:text-5xl xl:text-[9rem] text-[#C9D1D9] tracking-tighter uppercase leading-[0.9]">
             TECHNICAL <span className="text-outline">TOOLCHAIN.</span>
           </h2>
@@ -91,7 +92,7 @@ export const TechStackSection: React.FC = () => {
               <span>TOTAL {totalSkillsCount} PRODUCTION CAPABILITIES</span>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
 
       </div>
 
@@ -179,7 +180,11 @@ export const TechStackSection: React.FC = () => {
 
         {/* Category grid — horizontal, compact */}
         {visibleCategories.length > 0 ? (
-          <div className={`grid ${gridCols} gap-4 mb-14`} onMouseLeave={() => setActiveSkill(null)}>
+          <ScrollReveal
+            className={`grid ${gridCols} gap-4 mb-14`}
+            onMouseLeave={() => setActiveSkill(null)}
+            amount={0.08}
+          >
             {visibleCategories.map((category) => (
               <motion.div
                 layout
@@ -245,7 +250,7 @@ export const TechStackSection: React.FC = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </ScrollReveal>
         ) : (
           <div className="mb-14 py-10 text-center font-mono text-xs text-[#8B949E] border border-dashed border-[#30363D] rounded-xl">
             No technology matches “{searchQuery}”.
@@ -253,7 +258,9 @@ export const TechStackSection: React.FC = () => {
         )}
 
         {/* Currently Exploring */}
-        <CurrentlyExploring />
+        <ScrollReveal>
+          <CurrentlyExploring />
+        </ScrollReveal>
       </div>
     </section>
   );

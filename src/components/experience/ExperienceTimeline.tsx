@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AnimatePresence, motion, type Variants } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion, type Variants } from 'motion/react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -467,6 +467,7 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
 
 export const ExperienceTimeline: React.FC = () => {
   const currentExp = EXPERIENCE_DATA[0];
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <section
@@ -484,7 +485,13 @@ export const ExperienceTimeline: React.FC = () => {
         {/* Timeline */}
         <div className="relative pl-6 sm:pl-10">
           {/* Timeline line */}
-          <div className="absolute bottom-0 left-0 top-0 w-px bg-gradient-to-b from-[#3FB950] via-[#3FB950]/50 to-transparent" />
+          <motion.div
+            initial={prefersReducedMotion ? false : { scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: prefersReducedMotion ? 0.01 : 0.75, ease: EASE }}
+            className="absolute bottom-0 left-0 top-0 w-px origin-top bg-gradient-to-b from-[#3FB950] via-[#3FB950]/50 to-transparent"
+          />
 
           {/* Timeline node */}
           <div className="absolute -left-[7px] top-0 flex h-3.5 w-3.5 items-center justify-center rounded-full border border-[#3FB950] bg-[#0D1117]">

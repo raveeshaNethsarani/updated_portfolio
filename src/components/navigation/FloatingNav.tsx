@@ -5,9 +5,14 @@ import { Menu, X, FileText, Terminal, Activity } from 'lucide-react';
 interface FloatingNavProps {
   onOpenResume: () => void;
   onOpenTerminal?: () => void;
+  onNavigateHome: () => void;
 }
 
-export const FloatingNav: React.FC<FloatingNavProps> = ({ onOpenResume, onOpenTerminal }) => {
+export const FloatingNav: React.FC<FloatingNavProps> = ({
+  onOpenResume,
+  onOpenTerminal,
+  onNavigateHome,
+}) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,7 +53,13 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onOpenResume, onOpenTe
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) {
+      el.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    }
+    if (id === 'hero') onNavigateHome();
     setMobileMenuOpen(false);
   };
 
