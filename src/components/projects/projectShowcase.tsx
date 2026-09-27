@@ -16,11 +16,12 @@ export const ProjectShowcase = () => {
   const move = useCallback((nextIndex: number) => {
     const normalizedIndex = (nextIndex + PROJECTS.length) % PROJECTS.length;
     setActiveIndex(normalizedIndex);
-    cardRefs.current[normalizedIndex]?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'center'
-    });
+    const card = cardRefs.current[normalizedIndex];
+    const track = trackRef.current;
+    if (card && track) {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      track.scrollTo({ left: cardCenter - track.offsetWidth / 2, behavior: 'smooth' });
+    }
   }, []);
 
   const next = useCallback(() => move(activeIndex + 1), [activeIndex, move]);

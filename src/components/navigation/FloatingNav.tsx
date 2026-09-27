@@ -45,6 +45,13 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onOpenResume, onOpenTe
     { label: 'CONTACT', href: '#contact', id: 'contact' }
   ];
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
       <motion.header
@@ -64,6 +71,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onOpenResume, onOpenTe
           <a
             href="#hero"
             id="nav-logo"
+            onClick={(e) => scrollToSection(e, 'hero')}
             className="flex items-center gap-3 sm:gap-6 group focus:outline-none"
           >
             <div className="flex items-center gap-2">
@@ -86,6 +94,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onOpenResume, onOpenTe
                   key={item.id}
                   href={item.href}
                   id={`nav-link-${item.id}`}
+                  onClick={(e) => scrollToSection(e, item.id)}
                   className={`mono text-[11px] uppercase tracking-widest transition-colors duration-200 relative py-1 ${
                     isActive
                       ? 'text-[#3FB950] font-bold'
@@ -156,7 +165,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onOpenResume, onOpenTe
                 <a
                   key={item.id}
                   href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => scrollToSection(e, item.id)}
                   className={`text-sm font-mono tracking-wider py-2 border-b border-[#21262D] ${
                     activeSection === item.id ? 'text-[#3FB950] font-bold' : 'text-[#8B949E]'
                   }`}
