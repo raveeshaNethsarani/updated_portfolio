@@ -72,10 +72,10 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
         initial={{ y: -24, opacity: 0 }}
         animate={introReady ? { y: 0, opacity: 1 } : { y: -24, opacity: 0 }}
         transition={{ duration: 0.6, ease: EASE }}
-        className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-4 sm:py-6 flex justify-center pointer-events-none"
+        className="fixed top-0 left-0 right-0 z-40 gutter-x py-4 sm:py-6 flex justify-center pointer-events-none"
       >
         <div
-          className={`pointer-events-auto w-full max-w-[1920px] mx-auto flex items-center justify-between px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`pointer-events-auto w-full max-w-[1920px] mx-auto flex items-center justify-between gap-4 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isScrolled
               ? 'bg-[#161B22]/75 backdrop-blur-md border border-[#30363D] shadow-2xl shadow-black/50'
               : 'bg-transparent border border-transparent'
@@ -86,7 +86,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
             href="#hero"
             id="nav-logo"
             onClick={(e) => scrollToSection(e, 'hero')}
-            className="flex items-center gap-3 sm:gap-6 group focus:outline-none"
+            className="flex items-center gap-3 sm:gap-6 group focus:outline-none -my-2 py-2"
           >
             <div className="flex items-center gap-2">
               <span className="mono text-xs tracking-widest text-[#3FB950] font-bold">
@@ -100,7 +100,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
           </a>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+          <nav className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8">
             {navItems.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -109,7 +109,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
                   href={item.href}
                   id={`nav-link-${item.id}`}
                   onClick={(e) => scrollToSection(e, item.id)}
-                  className={`group mono text-[11px] uppercase tracking-widest transition-colors duration-200 relative py-1 ${
+                  className={`group mono text-[11px] uppercase tracking-widest transition-colors duration-200 relative py-2 lg:py-1 ${
                     isActive
                       ? 'text-[#3FB950] font-bold'
                       : 'text-[#8B949E] hover:text-[#C9D1D9]'
@@ -153,7 +153,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
           <div className="flex md:hidden items-center gap-2">
             <button
               onClick={onOpenResume}
-              className="p-2 rounded-lg bg-[#21262D] border border-[#30363D] text-[#C9D1D9] text-xs"
+              className="p-2.5 rounded-lg bg-[#21262D] border border-[#30363D] text-[#C9D1D9] text-xs"
               aria-label="View Resume"
             >
               <FileText className="w-4 h-4 text-[#3FB950]" />
@@ -162,6 +162,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               id="mobile-nav-toggle"
               className="p-2 rounded-lg bg-[#161B22] border border-[#30363D] text-[#C9D1D9]"
+              aria-expanded={mobileMenuOpen}
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -178,28 +179,28 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-x-4 top-20 z-40 md:hidden bg-[#161B22] border border-[#30363D] rounded-xl p-6 shadow-2xl backdrop-blur-xl"
+            className="fixed inset-x-4 top-20 z-40 md:hidden max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain bg-[#161B22] border border-[#30363D] rounded-xl p-5 sm:p-6 shadow-2xl backdrop-blur-xl"
           >
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-1">
               {navItems.map((item) => (
                 <a
                   key={item.id}
                   href={item.href}
                   onClick={(e) => scrollToSection(e, item.id)}
-                  className={`text-sm font-mono tracking-wider py-2 border-b border-[#21262D] ${
+                  className={`block text-sm font-mono tracking-wider py-3 border-b border-[#21262D] ${
                     activeSection === item.id ? 'text-[#3FB950] font-bold' : 'text-[#8B949E]'
                   }`}
                 >
                   {item.label}
                 </a>
               ))}
-              <div className="pt-2 flex flex-col gap-3">
+              <div className="pt-4 flex flex-col gap-3">
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     onOpenResume();
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-[#21262D] border border-[#30363D] text-xs font-mono text-[#C9D1D9]"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-[#21262D] border border-[#30363D] text-xs font-mono text-[#C9D1D9]"
                 >
                   <FileText className="w-4 h-4 text-[#3FB950]" />
                   <span>VIEW FULL RESUME</span>

@@ -23,24 +23,24 @@ export const AboutSection: React.FC = () => {
   return (
     <section
       id="about"
-      className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117] py-24 sm:py-32 lg:py-30"
+      className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117] section-y"
     >
       {/* Background Grid */}
       <div className="pointer-events-none absolute inset-0 bg-dot-pattern opacity-15" />
 
       {/* Main Container */}
-      <div className="relative z-10 mx-auto w-full max-w-[1920px] px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
+      <div className="relative z-10 section-container">
         
         {/* Section Header */}
-        <ScrollReveal className="mb-16 flex items-center justify-between border-b border-[#30363D] pb-4 lg:mb-24">
-          <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#3FB950] sm:text-xs sm:tracking-[0.3em]">
-            <span className="inline-block h-2 w-2 rounded-full bg-[#3FB950]" />
-            <span>[ 03 // ENGINEERING BIOGRAPHY &amp; METHODOLOGY ]</span>
+        <ScrollReveal className="mb-10 flex items-center justify-between border-b border-[#30363D] pb-4 sm:mb-16 lg:mb-24">
+          <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[#3FB950] sm:text-xs lg:tracking-[0.3em]">
+            <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-[#3FB950]" />
+            <span className="text-balance">[ 03 // ENGINEERING BIOGRAPHY &amp; METHODOLOGY ]</span>
           </div>
         </ScrollReveal>
 
         {/* Main Editorial Layout */}
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20 xl:gap-28">
+        <div className="grid grid-cols-1 gap-12 sm:gap-16 lg:grid-cols-12 lg:gap-20 xl:gap-28">
           
           {/* =========================================================
               LEFT — MASSIVE HEADLINE
@@ -53,7 +53,7 @@ export const AboutSection: React.FC = () => {
               </ScrollReveal>
 
               <ScrollReveal delay={0.06}>
-                <h2 className="font-black uppercase leading-[0.82] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] 2xl:text-[7rem]">
+                <h2 className="font-black uppercase leading-[0.82] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[length:clamp(5.5rem,9.4vw,8.5rem)] 2xl:text-[7rem]">
                 ENGINEER
                 <br />
 
@@ -70,10 +70,10 @@ export const AboutSection: React.FC = () => {
               </ScrollReveal>
 
               {/* Small technical line */}
-              <ScrollReveal delay={0.12} className="mt-10 flex max-w-xl items-start gap-4 border-l border-[#3FB950] pl-5">
+              <ScrollReveal delay={0.12} className="mt-8 sm:mt-10 flex max-w-xl items-start gap-4 border-l border-[#3FB950] pl-5">
                 <Zap className="mt-0.5 h-4 w-4 shrink-0 text-[#3FB950]" />
 
-                <p className="font-mono text-xs leading-relaxed text-[#8B949E] sm:text-sm text-justify">
+                <p className="font-mono text-xs leading-relaxed text-[#8B949E] sm:text-sm sm:text-justify">
                   From interface behavior to backend infrastructure,
                   I approach software as a connected system rather than
                   a collection of isolated features.
@@ -95,7 +95,7 @@ export const AboutSection: React.FC = () => {
                   <span>PROFILE</span>
                 </motion.div>
 
-                <motion.p variants={revealItem} className="text-base font-light leading-relaxed sm:text-lg text-justify">
+                <motion.p variants={revealItem} className="text-base font-light leading-relaxed sm:text-lg sm:text-justify">
                   Operating at the intersection of{' '}
                   <strong className="font-semibold text-white">
                     client-side reactivity
@@ -111,7 +111,7 @@ export const AboutSection: React.FC = () => {
                   .
                 </motion.p>
 
-                <motion.p variants={revealItem} className="text-sm leading-7 text-[#8B949E] sm:text-base text-justify">
+                <motion.p variants={revealItem} className="text-sm leading-7 text-[#8B949E] sm:text-base sm:text-justify">
                   My technical philosophy was shaped through rigorous
                   academic study in the IT Department of the{' '}
                   <strong className="text-[#C9D1D9]">
@@ -122,7 +122,7 @@ export const AboutSection: React.FC = () => {
                   Technology.
                 </motion.p>
 
-                <motion.p variants={revealItem} className="text-sm leading-7 text-[#8B949E] sm:text-base text-justify">
+                <motion.p variants={revealItem} className="text-sm leading-7 text-[#8B949E] sm:text-base sm:text-justify">
                   That foundation developed my focus on database design,
                   computational thinking, networking, and disciplined
                   software engineering practices.
@@ -161,7 +161,7 @@ export const AboutSection: React.FC = () => {
 
 
          {/* Credential Cards */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 max-w-[1920px] mx-auto pt-10 px-25">
+              <div className="relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2 section-container pt-10 sm:pt-12">
 
                 {/* Work */}
                 <ScrollReveal delay={0.05} className="motion-lift group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#3FB950]/50">

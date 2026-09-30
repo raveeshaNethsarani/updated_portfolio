@@ -63,28 +63,28 @@ export const TechStackSection: React.FC = () => {
       : 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-4';
 
   return (
-    <section id="stack" className="relative bg-[#0D1117]/80 py-16 sm:py-20 border-b border-[#30363D]">
+    <section id="stack" className="relative bg-[#0D1117]/80 section-y border-b border-[#30363D]">
       {/* Background Dots */}
       <div className="absolute inset-0 bg-dot-pattern opacity-15 pointer-events-none" />
 
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="section-container relative z-10">
         {/* Eyebrow */}
-        <ScrollReveal className="flex items-center justify-between border-b border-[#30363D] pb-3 mb-8">
-          <div className="flex items-center gap-3 text-[#3FB950] mono text-xs tracking-[0.3em] uppercase">
-            <span className="w-2 h-2 rounded-full bg-[#3FB950] inline-block" />
-            <span>[ 05 // SYSTEM TOOLCHAIN &amp; RUNTIME CONTRACTS ]</span>
+        <ScrollReveal className="flex items-center justify-between gap-4 border-b border-[#30363D] pb-3 mb-8">
+          <div className="flex min-w-0 items-center gap-3 text-[#3FB950] mono text-[10px] sm:text-xs tracking-[0.2em] lg:tracking-[0.3em] uppercase">
+            <span className="w-2 h-2 shrink-0 rounded-full bg-[#3FB950] inline-block" />
+            <span className="text-balance">[ 05 // SYSTEM TOOLCHAIN &amp; RUNTIME CONTRACTS ]</span>
           </div>
-          <span className="hidden sm:inline-block mono text-[10px] text-[#8B949E] uppercase tracking-widest">
+          <span className="hidden shrink-0 whitespace-nowrap sm:inline-block mono text-[10px] text-[#8B949E] uppercase tracking-widest">
             STRICT TYPE SAFETY &bull; PRODUCTION PROVEN
           </span>
         </ScrollReveal>
 
         {/* Header — single horizontal row */}
         <ScrollReveal delay={0.06} className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-8">
-          <h2 className="font-black text-4xl sm:text-5xl xl:text-[9rem] text-[#C9D1D9] tracking-tighter uppercase leading-[0.9]">
+          <h2 className="font-black text-4xl sm:text-5xl lg:text-[length:clamp(3rem,8.5vw,9rem)] xl:text-[length:clamp(6rem,10vw,9rem)] text-[#C9D1D9] tracking-tighter uppercase leading-[0.9]">
             TECHNICAL <span className="text-outline">TOOLCHAIN.</span>
           </h2>
-          <div className="lg:max-w-md space-y-2">
+          <div className="lg:max-w-md lg:min-w-[18rem] space-y-2">
             <p className="mono text-xs text-[#8B949E] leading-relaxed">
               Curated architectural dependencies and runtimes — paired with strict type soundness,
               operational reliability, and observable execution.
@@ -103,14 +103,14 @@ export const TechStackSection: React.FC = () => {
         <TechMarquee />
       </div> */}
 
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="section-container relative z-10">
 
         {/* Toolbar: tabs + search */}
         <div className="flex flex-col lg:flex-row lg:items-center gap-3 mb-3 bg-[#161B22]/80 border border-[#30363D] p-2.5 rounded-xl backdrop-blur-md">
           <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`px-3 py-1.5 rounded-lg text-[11px] font-mono tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-2 lg:py-1.5 rounded-lg text-[11px] font-mono tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                 selectedCategory === 'all'
                   ? 'bg-[#3FB950] text-[#0D1117] font-bold'
                   : 'text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#21262D]'
@@ -122,7 +122,7 @@ export const TechStackSection: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-mono tracking-wider transition-all whitespace-nowrap cursor-pointer border ${
+                className={`px-3 py-2 lg:py-1.5 rounded-lg text-[11px] font-mono tracking-wider transition-all whitespace-nowrap cursor-pointer border ${
                   selectedCategory === cat.id
                     ? 'bg-[#21262D] text-[#3FB950] border-[#3FB950]/50 font-bold'
                     : 'border-transparent text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#21262D]'
@@ -155,7 +155,7 @@ export const TechStackSection: React.FC = () => {
         </div>
 
         {/* Inspector strip — shows notes instead of taking card height */}
-        <div className="h-9 mb-5 flex items-center justify-between gap-4 px-3 rounded-lg border border-dashed border-[#30363D] bg-[#0D1117]/60 font-mono text-[11px] overflow-hidden">
+        <div className="h-9 mb-5 hidden md:flex items-center justify-between gap-4 px-3 rounded-lg border border-dashed border-[#30363D] bg-[#0D1117]/60 font-mono text-[11px] overflow-hidden">
           {/* <div className="flex items-center gap-2 min-w-0">
             {activeSkill ? (
               <>
@@ -183,7 +183,7 @@ export const TechStackSection: React.FC = () => {
         {/* Category grid — horizontal, compact */}
         {visibleCategories.length > 0 ? (
           <ScrollReveal
-            className={`grid ${gridCols} gap-4 mb-14`}
+            className={`grid ${gridCols} gap-3 sm:gap-4 mb-10 sm:mb-14`}
             onMouseLeave={() => setActiveSkill(null)}
             amount={0.08}
             stagger={0.08}
@@ -254,7 +254,7 @@ export const TechStackSection: React.FC = () => {
             ))}
           </ScrollReveal>
         ) : (
-          <div className="mb-14 py-10 text-center font-mono text-xs text-[#8B949E] border border-dashed border-[#30363D] rounded-xl">
+          <div className="mb-10 sm:mb-14 py-10 text-center font-mono text-xs text-[#8B949E] border border-dashed border-[#30363D] rounded-xl">
             No technology matches “{searchQuery}”.
           </div>
         )}
