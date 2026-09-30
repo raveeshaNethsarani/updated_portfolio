@@ -27,7 +27,7 @@ const headerReveal: Variants = {
 };
 
 const fadeUpReveal: Variants = {
-  hidden: { opacity: 0, y: 14, scale: 0.995 },
+  hidden: { opacity: 0, y: 24, scale: 0.995 },
   visible: {
     opacity: 1,
     y: 0,

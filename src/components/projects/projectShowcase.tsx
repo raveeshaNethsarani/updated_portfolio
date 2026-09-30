@@ -55,7 +55,7 @@ const trackVariants: Variants = {
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 48, scale: 0.96 },
+  hidden: { opacity: 0, y: 36, scale: 0.98 },
   show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: EASE } },
 };
 
@@ -73,8 +73,8 @@ const ControlButton = ({ label, onClick, children, accent = false }: ControlButt
     type="button"
     onClick={onClick}
     aria-label={label}
-    whileHover={{ y: -2 }}
-    whileTap={{ scale: 0.92 }}
+    whileHover={{ y: -1, scale: 1.03 }}
+    whileTap={{ scale: 0.96 }}
     className={`grid h-10 w-10 place-items-center rounded-full border border-[#30363D] bg-[#161B22]/80 backdrop-blur transition-colors duration-300 ${
       accent
         ? 'text-[#C9D1D9] hover:border-[#3FB950] hover:text-[#3FB950]'

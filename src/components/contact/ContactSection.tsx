@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Mail, Github, Linkedin, FileText, Copy, Check, Send, ShieldCheck } from 'lucide-react';
 import { ScrollReveal } from '../animations/ScrollReveal';
+import { revealItem } from '../animations/motionPresets';
 
 interface ContactSectionProps {
   onOpenResume: () => void;
@@ -14,12 +15,17 @@ const LINKEDIN_URL = 'https://linkedin.com'; // TODO: replace with your profile 
 
 const INITIAL_FORM = { name: '', email: '', message: '' };
 
+const channelList = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
+};
+
 // ---------- Shared styles ----------
 const labelClass = 'block text-[#8B949E] mb-1.5 uppercase tracking-wider text-[10px] font-bold';
 const inputClass =
   'w-full bg-[#0D1117] border border-[#30363D] rounded-lg px-4 py-3 text-white placeholder:text-[#8B949E]/40 focus:outline-none focus:border-[#3FB950] transition-colors';
 const channelBtnClass =
-  'flex items-center justify-center gap-1.5 py-2.5 bg-[#0D1117] hover:bg-[#21262D] border border-[#30363D] mono text-[11px] rounded-lg transition-all cursor-pointer';
+  'motion-btn group flex items-center justify-center gap-1.5 py-2.5 bg-[#0D1117] hover:bg-[#21262D] border border-[#30363D] mono text-[11px] rounded-lg transition-all cursor-pointer';
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) => {
   const prefersReducedMotion = useReducedMotion();
@@ -78,29 +84,30 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
         </ScrollReveal>
 
         {/* Headline row — full width so the 6rem headline fits */}
-        <ScrollReveal delay={0.06} className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 border-b border-[#30363D] pb-10 mb-10">
-          <h2 className="font-black text-5xl sm:text-7xl lg:text-[7rem] text-[#C9D1D9] tracking-tighter leading-[0.88] uppercase">
+        <ScrollReveal delay={0.06} stagger={0.1} className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 border-b border-[#30363D] pb-10 mb-10">
+          <motion.h2 variants={revealItem} className="font-black text-5xl sm:text-7xl lg:text-[7rem] text-[#C9D1D9] tracking-tighter leading-[0.88] uppercase">
             LET&apos;S BUILD
             <br />
             <span className="text-[#3FB950]">SOMETHING</span>
             <br />
             <span className="text-outline">MEANINGFUL.</span>
-          </h2>
+          </motion.h2>
 
           <div className="lg:max-w-md flex flex-col gap-5">
-            <p className="mono text-sm text-[#8B949E] leading-relaxed font-light">
+            <motion.p variants={revealItem} className="mono text-sm text-[#8B949E] leading-relaxed font-light">
               Available for technical leadership, full-stack system architecture, high-throughput
               backend services, and high-impact software engineering projects.
-            </p>
+            </motion.p>
 
             <motion.button
               onClick={handleCopyEmail}
               id="contact-email-btn"
-              whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
+              variants={revealItem}
+              whileHover={prefersReducedMotion ? undefined : { y: -1, scale: 1.02 }}
               whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
-              className="self-start inline-flex items-center gap-3 px-6 py-3.5 bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] mono text-xs tracking-wider font-black rounded-xl transition-all duration-200 cursor-pointer shadow-xl shadow-[#3FB950]/20 active:scale-95"
+              className="group self-start inline-flex items-center gap-3 px-6 py-3.5 bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] mono text-xs tracking-wider font-black rounded-xl transition-[background-color,box-shadow,color] duration-200 cursor-pointer shadow-xl shadow-[#3FB950]/20"
             >
-              <Mail className="w-4 h-4" />
+              <Mail className="motion-icon motion-icon-up w-4 h-4" />
               <span>{copiedEmail ? 'COPIED TO CLIPBOARD' : 'COPY DIRECT EMAIL'}</span>
               {copiedEmail ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4 opacity-75" />}
             </motion.button>
@@ -132,37 +139,40 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2.5">
-                <a
+              <motion.div variants={channelList} className="grid grid-cols-3 gap-2.5">
+                <motion.a
+                  variants={revealItem}
                   href={GITHUB_URL}
                   target="_blank"
                   rel="noreferrer"
                   id="contact-github-btn"
                   className={`${channelBtnClass} text-[#C9D1D9] hover:text-white hover:border-[#8B949E]`}
                 >
-                  <Github className="w-3.5 h-3.5" />
+                  <Github className="motion-icon motion-icon-up w-3.5 h-3.5" />
                   <span>GITHUB</span>
-                </a>
-                <a
+                </motion.a>
+                <motion.a
+                  variants={revealItem}
                   href={LINKEDIN_URL}
                   target="_blank"
                   rel="noreferrer"
                   id="contact-linkedin-btn"
                   className={`${channelBtnClass} text-[#58A6FF] hover:text-white hover:border-[#58A6FF]`}
                 >
-                  <Linkedin className="w-3.5 h-3.5" />
+                  <Linkedin className="motion-icon motion-icon-up w-3.5 h-3.5" />
                   <span>LINKEDIN</span>
-                </a>
-                <button
+                </motion.a>
+                <motion.button
+                  variants={revealItem}
                   type="button"
                   onClick={onOpenResume}
                   id="contact-view-resume-btn"
                   className={`${channelBtnClass} text-[#A371F7] hover:text-white hover:border-[#A371F7]`}
                 >
-                  <FileText className="w-3.5 h-3.5" />
+                  <FileText className="motion-icon motion-icon-up w-3.5 h-3.5" />
                   <span>RESUME</span>
-                </button>
-              </div>
+                </motion.button>
+              </motion.div>
             </div>
           </ScrollReveal>
 
@@ -239,9 +249,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-xl bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] font-black text-xs tracking-widest uppercase transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-[#3FB950]/15 active:scale-[0.98]"
+                    className="motion-btn group w-full flex items-center justify-center gap-2.5 py-3.5 px-6 rounded-xl bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] font-black text-xs tracking-widest uppercase transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-[#3FB950]/15"
                   >
-                    <Send className="w-4 h-4" />
+                    <Send className="motion-icon motion-icon-diag w-4 h-4" />
                     <span>{isSubmitting ? 'TRANSMITTING MESSAGE...' : 'TRANSMIT INQUIRY'}</span>
                   </button>
                 </motion.form>
@@ -264,7 +274,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="mt-2 px-5 py-2.5 rounded-lg bg-[#21262D] border border-[#30363D] text-xs text-white hover:bg-[#30363D] transition-colors font-bold cursor-pointer"
+                    className="motion-btn mt-2 px-5 py-2.5 rounded-lg bg-[#21262D] border border-[#30363D] text-xs text-white hover:bg-[#30363D] transition-colors font-bold cursor-pointer"
                   >
                     SEND ANOTHER MESSAGE
                   </button>
@@ -287,7 +297,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
           <div className="flex items-center gap-4 text-[11px]">
             <span>&copy; {new Date().getFullYear()} ALL RIGHTS RESERVED</span>
             <span className="hidden sm:inline">&bull;</span>
-            <a href="#hero" className="hover:text-[#3FB950] transition-colors">
+            <a href="#hero" className="link-underline hover:text-[#3FB950] transition-colors">
               BACK TO TOP [↑]
             </a>
           </div>

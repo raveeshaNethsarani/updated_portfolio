@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { ScrollReveal } from '../animations/ScrollReveal';
+import { CountUp } from '../animations/CountUp';
+import { EASE, revealItem } from '../animations/motionPresets';
 import { Search, X } from 'lucide-react';
 import { SKILLS_DATA } from '../../data/skills';
 import { TechIcon } from './TechIcons';
@@ -89,7 +91,7 @@ export const TechStackSection: React.FC = () => {
             </p>
             <div className="mono text-xs text-[#3FB950] flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#3FB950] animate-pulse" />
-              <span>TOTAL {totalSkillsCount} PRODUCTION CAPABILITIES</span>
+              <span>TOTAL <CountUp value={totalSkillsCount} /> PRODUCTION CAPABILITIES</span>
             </div>
           </div>
         </ScrollReveal>
@@ -184,14 +186,14 @@ export const TechStackSection: React.FC = () => {
             className={`grid ${gridCols} gap-4 mb-14`}
             onMouseLeave={() => setActiveSkill(null)}
             amount={0.08}
+            stagger={0.08}
           >
             {visibleCategories.map((category) => (
               <motion.div
                 layout
                 key={category.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25 }}
+                variants={revealItem}
+                transition={{ layout: { duration: 0.35, ease: EASE } }}
                 className="flex flex-col bg-[#161B22]/70 border border-[#30363D]/80 rounded-xl p-4 backdrop-blur-sm hover:border-[#30363D] transition-colors"
               >
                 {/* Card header */}
@@ -229,7 +231,7 @@ export const TechStackSection: React.FC = () => {
                         onFocus={() => setActiveSkill(info)}
                         onClick={() => setActiveSkill(info)}
                         title={skill.notes ? `${skill.level} — ${skill.notes}` : skill.level}
-                        className={`group flex items-center gap-1.5 pl-1.5 pr-2 py-1 rounded-md border bg-[#0D1117]/80 transition-all duration-150 cursor-pointer select-none hover:-translate-y-0.5 ${
+                        className={`group flex items-center gap-1.5 pl-1.5 pr-2 py-1 rounded-md border bg-[#0D1117]/80 transition-all duration-200 cursor-pointer select-none hover:-translate-y-0.5 hover:shadow-[0_6px_16px_-8px_rgba(63,185,80,0.45)] ${
                           isActive
                             ? 'border-[#3FB950]/70 bg-[#161B22]'
                             : skill.highlight
@@ -237,7 +239,7 @@ export const TechStackSection: React.FC = () => {
                             : 'border-[#30363D]/70 hover:border-[#3FB950]/60'
                         }`}
                       >
-                        <span className="w-5 h-5 rounded flex items-center justify-center bg-[#161B22] text-[#8B949E] group-hover:text-white">
+                        <span className="w-5 h-5 rounded flex items-center justify-center bg-[#161B22] text-[#8B949E] group-hover:text-white transition-transform duration-200 group-hover:scale-110">
                           <TechIcon name={skill.name} className="w-3 h-3" colored={true} />
                         </span>
                         <span className="font-mono text-[11px] font-semibold text-[#C9D1D9] group-hover:text-white whitespace-nowrap">
@@ -258,7 +260,7 @@ export const TechStackSection: React.FC = () => {
         )}
 
         {/* Currently Exploring */}
-        <ScrollReveal>
+        <ScrollReveal stagger={0} amount={0.1}>
           <CurrentlyExploring />
         </ScrollReveal>
       </div>
