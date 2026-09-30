@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { ScrollReveal } from '../animations/ScrollReveal';
+import { accentLine, revealItem } from '../animations/motionPresets';
 import {
   Terminal,
   Cpu,
@@ -84,16 +86,16 @@ export const AboutSection: React.FC = () => {
               RIGHT — BIOGRAPHY + CREDENTIALS + QUOTE
           ========================================================== */}
           <div className="lg:col-span-5">
-            <ScrollReveal delay={0.08} className="space-y-10">
+            <ScrollReveal delay={0.08} stagger={0.1} className="space-y-10">
 
               {/* Biography */}
               <div className="space-y-6 text-[#C9D1D9]/90 ">
-                <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#3FB950] ">
-                  <span className="h-px w-8 bg-[#3FB950]" />
+                <motion.div variants={revealItem} className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#3FB950] ">
+                  <motion.span variants={accentLine} className="h-px w-8 origin-left bg-[#3FB950]" />
                   <span>PROFILE</span>
-                </div>
+                </motion.div>
 
-                <p className="text-base font-light leading-relaxed sm:text-lg text-justify">
+                <motion.p variants={revealItem} className="text-base font-light leading-relaxed sm:text-lg text-justify">
                   Operating at the intersection of{' '}
                   <strong className="font-semibold text-white">
                     client-side reactivity
@@ -107,9 +109,9 @@ export const AboutSection: React.FC = () => {
                     BotCalm (Pvt) Ltd
                   </strong>
                   .
-                </p>
+                </motion.p>
 
-                <p className="text-sm leading-7 text-[#8B949E] sm:text-base text-justify">
+                <motion.p variants={revealItem} className="text-sm leading-7 text-[#8B949E] sm:text-base text-justify">
                   My technical philosophy was shaped through rigorous
                   academic study in the IT Department of the{' '}
                   <strong className="text-[#C9D1D9]">
@@ -118,9 +120,9 @@ export const AboutSection: React.FC = () => {
                   </strong>
                   , where I earned a Higher National Diploma in Information
                   Technology.
-                </p>
+                </motion.p>
 
-                <p className="text-sm leading-7 text-[#8B949E] sm:text-base text-justify">
+                <motion.p variants={revealItem} className="text-sm leading-7 text-[#8B949E] sm:text-base text-justify">
                   That foundation developed my focus on database design,
                   computational thinking, networking, and disciplined
                   software engineering practices.
@@ -129,7 +131,7 @@ export const AboutSection: React.FC = () => {
                   role-based access control, database-backed services,
                   reactive interfaces, and distributed application
                   components.
-                </p>
+                </motion.p>
               </div>
 
            
@@ -162,10 +164,10 @@ export const AboutSection: React.FC = () => {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 max-w-[1920px] mx-auto pt-10 px-25">
 
                 {/* Work */}
-                <ScrollReveal delay={0.05} className="group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#3FB950]/50">
+                <ScrollReveal delay={0.05} className="motion-lift group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#3FB950]/50">
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-wider text-[#3FB950]">
-                      <Briefcase className="h-3.5 w-3.5" />
+                      <Briefcase className="motion-icon motion-icon-up h-3.5 w-3.5" />
                       <span>PRODUCTION AFFILIATION</span>
                     </div>
 
@@ -184,10 +186,10 @@ export const AboutSection: React.FC = () => {
                 </ScrollReveal>
 
                 {/* Education */}
-                <ScrollReveal delay={0.12} className="group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#58A6FF]/50">
+                <ScrollReveal delay={0.12} className="motion-lift group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#58A6FF]/50">
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-wider text-[#58A6FF]">
-                      <GraduationCap className="h-3.5 w-3.5" />
+                      <GraduationCap className="motion-icon motion-icon-up h-3.5 w-3.5" />
                       <span>ACADEMIC CREDENTIAL</span>
                     </div>
 

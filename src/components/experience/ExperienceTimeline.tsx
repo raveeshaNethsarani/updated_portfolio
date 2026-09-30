@@ -37,6 +37,12 @@ const cardIn: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
 };
 
+// Main card waits for the timeline line to start drawing: line → item → content → technologies.
+const timelineCard: Variants = {
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE, delay: 0.25 } },
+};
+
 const listItem: Variants = {
   hidden: { opacity: 0, x: -12 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: EASE } },
@@ -74,8 +80,8 @@ const NavButton: React.FC<{
   <motion.button
     type="button"
     onClick={onClick}
-    whileHover={{ scale: 1.08 }}
-    whileTap={{ scale: 0.92 }}
+    whileHover={{ y: -1, scale: 1.04 }}
+    whileTap={{ scale: 0.96 }}
     aria-label={label}
     className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#30363D] bg-[#0D1117] text-[#8B949E] transition-colors duration-200 hover:border-[#3FB950]/60 hover:text-[#3FB950]"
   >
@@ -224,8 +230,8 @@ const ProgressionGrid: React.FC<{
         <motion.div
           key={phase.number}
           variants={cardIn}
-          whileHover={{ y: -4 }}
-          className="rounded-xl border border-[#30363D] bg-[#0D1117] p-5 transition-colors duration-300 hover:border-[#3FB950]/40"
+          whileHover={{ y: -3 }}
+          className="rounded-xl border border-[#30363D] bg-[#0D1117] p-5 transition-[border-color,box-shadow] duration-300 hover:border-[#3FB950]/40 hover:shadow-[0_18px_40px_-24px_rgba(63,185,80,0.28)]"
         >
           <div className="mb-5 flex items-center justify-between">
             <span className="font-mono text-[10px] font-bold text-[#3FB950]">
@@ -371,7 +377,8 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
                 <motion.div
                   variants={staggerContainer}
                   initial="hidden"
-                  animate="visible"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
                   className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2"
                 >
                   {project.responsibilities.map((item) => (
@@ -397,7 +404,8 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
                 <motion.div
                   variants={staggerContainer}
                   initial="hidden"
-                  animate="visible"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
                   className="flex flex-wrap gap-2"
                 >
                   {project.stack.map((tag) => (
@@ -488,19 +496,27 @@ export const ExperienceTimeline: React.FC = () => {
           <motion.div
             initial={prefersReducedMotion ? false : { scaleY: 0 }}
             whileInView={{ scaleY: 1 }}
-            viewport={{ once: true, amount: 0.15 }}
+            viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: prefersReducedMotion ? 0.01 : 0.75, ease: EASE }}
             className="absolute bottom-0 left-0 top-0 w-px origin-top bg-gradient-to-b from-[#3FB950] via-[#3FB950]/50 to-transparent"
           />
 
           {/* Timeline node */}
-          <div className="absolute -left-[7px] top-0 flex h-3.5 w-3.5 items-center justify-center rounded-full border border-[#3FB950] bg-[#0D1117]">
+          <motion.div
+            initial={prefersReducedMotion ? false : { scale: 0, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.4, delay: 0.15, ease: EASE }}
+            className="absolute -left-[7px] top-0 flex h-3.5 w-3.5 items-center justify-center rounded-full border border-[#3FB950] bg-[#0D1117]"
+          >
+            {/* Soft halo marks this as the current role */}
+            <span className="absolute inset-0 rounded-full border border-[#3FB950]/40 motion-safe:animate-ping" />
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#3FB950]" />
-          </div>
+          </motion.div>
 
           {/* Main experience card */}
           <motion.div
-            variants={cardIn}
+            variants={timelineCard}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}

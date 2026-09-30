@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, FileText, Terminal, Activity } from 'lucide-react';
+import { useIntroReady } from '../animations/IntroContext';
+import { EASE } from '../animations/motionPresets';
 
 interface FloatingNavProps {
   onOpenResume: () => void;
@@ -16,6 +18,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const introReady = useIntroReady();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,13 +69,13 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
   return (
     <>
       <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ y: -24, opacity: 0 }}
+        animate={introReady ? { y: 0, opacity: 1 } : { y: -24, opacity: 0 }}
+        transition={{ duration: 0.6, ease: EASE }}
         className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-4 sm:py-6 flex justify-center pointer-events-none"
       >
         <div
-          className={`pointer-events-auto w-full max-w-[1920px] mx-auto flex items-center justify-between px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl transition-all duration-300 ${
+          className={`pointer-events-auto w-full max-w-[1920px] mx-auto flex items-center justify-between px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isScrolled
               ? 'bg-[#161B22]/75 backdrop-blur-md border border-[#30363D] shadow-2xl shadow-black/50'
               : 'bg-transparent border border-transparent'
@@ -106,13 +109,19 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
                   href={item.href}
                   id={`nav-link-${item.id}`}
                   onClick={(e) => scrollToSection(e, item.id)}
-                  className={`mono text-[11px] uppercase tracking-widest transition-colors duration-200 relative py-1 ${
+                  className={`group mono text-[11px] uppercase tracking-widest transition-colors duration-200 relative py-1 ${
                     isActive
                       ? 'text-[#3FB950] font-bold'
                       : 'text-[#8B949E] hover:text-[#C9D1D9]'
                   }`}
                 >
                   {item.label}
+                  {!isActive && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute bottom-0 left-0 right-0 h-px origin-left scale-x-0 bg-[#8B949E]/60 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100"
+                    />
+                  )}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
@@ -133,9 +142,9 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
             <button
               onClick={onOpenResume}
               id="nav-resume-btn"
-              className="px-4 py-2 border border-[#30363D] rounded-full text-[10px] mono tracking-widest uppercase hover:bg-[#30363D] hover:text-[#3FB950] text-[#C9D1D9] transition-all cursor-pointer flex items-center gap-2"
+              className="motion-btn group px-4 py-2 border border-[#30363D] rounded-full text-[10px] mono tracking-widest uppercase hover:bg-[#30363D] hover:text-[#3FB950] text-[#C9D1D9] transition-all cursor-pointer flex items-center gap-2"
             >
-              <FileText className="w-3.5 h-3.5 text-[#3FB950]" />
+              <FileText className="motion-icon motion-icon-up w-3.5 h-3.5 text-[#3FB950]" />
               <span>RESUME</span>
             </button>
           </div>
