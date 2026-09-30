@@ -147,7 +147,7 @@ export const SystemCommandBar: React.FC<SystemCommandBarProps> = ({
           </div>
 
           {/* Results List */}
-          <div className="p-3 max-h-96 overflow-y-auto space-y-3 no-scrollbar">
+          <div className="p-3 max-h-[min(24rem,55dvh)] overflow-y-auto space-y-3 no-scrollbar">
             {/* Quick Actions */}
             {filteredCommands.length > 0 && (
               <div>

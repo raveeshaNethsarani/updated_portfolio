@@ -47,6 +47,31 @@ html {
   }
 }
 
+/* ==========================================================================
+   Responsive layout system
+   One horizontal gutter and one vertical section rhythm for every section,
+   scaling fluidly: 16px / 64px on small phones → 48px / 128px on desktop.
+   ========================================================================== */
+
+@utility gutter-x {
+  padding-inline: clamp(1rem, 0.25rem + 3.2vw, 3rem);
+}
+
+@utility scroll-gutter-x {
+  scroll-padding-inline: clamp(1rem, 0.25rem + 3.2vw, 3rem);
+}
+
+@utility section-container {
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 0.25rem + 3.2vw, 3rem);
+}
+
+@utility section-y {
+  padding-block: clamp(4rem, 2rem + 6vw, 8rem);
+}
+
 /* Bold Typography Utilities */
 .mono {
   font-family: 'JetBrains Mono', monospace;

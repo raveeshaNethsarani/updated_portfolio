@@ -99,14 +99,14 @@ const SectionEyebrow: React.FC<{ period: string }> = ({ period }) => (
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, margin: '-80px' }}
-    className="mb-16 flex items-center justify-between border-b border-[#30363D] pb-4 lg:mb-24"
+    className="mb-10 flex items-center justify-between gap-4 border-b border-[#30363D] pb-4 sm:mb-16 lg:mb-24"
   >
-    <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#3FB950] sm:text-xs sm:tracking-[0.3em]">
-      <span className="h-2 w-2 animate-pulse rounded-full bg-[#3FB950]" />
-      <span>[ 04 // PROFESSIONAL LEDGER &amp; SYSTEM ROLES ]</span>
+    <div className="flex min-w-0 items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[#3FB950] sm:text-xs lg:tracking-[0.3em]">
+      <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-[#3FB950]" />
+      <span className="text-balance">[ 04 // PROFESSIONAL LEDGER &amp; SYSTEM ROLES ]</span>
     </div>
 
-    <span className="hidden font-mono text-[10px] uppercase tracking-widest text-[#8B949E] sm:inline-block">
+    <span className="hidden shrink-0 whitespace-nowrap font-mono text-[10px] uppercase tracking-widest text-[#8B949E] sm:inline-block">
       TENURE: {period}
     </span>
   </motion.div>
@@ -122,7 +122,7 @@ const EditorialHeader: React.FC<{ overview: string }> = ({ overview }) => (
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, margin: '-80px' }}
-    className="mb-16 grid grid-cols-1 gap-12 border-b border-[#30363D] pb-12 lg:mb-20 lg:grid-cols-12 lg:gap-20"
+    className="mb-12 grid grid-cols-1 gap-10 border-b border-[#30363D] pb-10 sm:mb-16 sm:gap-12 sm:pb-12 lg:mb-20 lg:grid-cols-12 lg:gap-20"
   >
     {/* Left */}
     <motion.div variants={fadeUp} className="lg:col-span-7">
@@ -131,7 +131,7 @@ const EditorialHeader: React.FC<{ overview: string }> = ({ overview }) => (
         <span>CAREER / ENGINEERING PROGRESSION</span>
       </div>
 
-      <h2 className="font-black uppercase leading-[0.84] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8.5rem] 2xl:text-[8rem]">
+      <h2 className="font-black uppercase leading-[0.84] tracking-[-0.07em] text-[#C9D1D9] text-[length:min(3rem,14vw)] sm:text-7xl md:text-8xl lg:text-[length:clamp(4.5rem,8vw,8.5rem)] 2xl:text-[8rem]">
         PRODUCTION
         <br />
         <span className="text-outline">EXPERIENCE.</span>
@@ -164,9 +164,9 @@ const EditorialHeader: React.FC<{ overview: string }> = ({ overview }) => (
 ============================================================ */
 
 const CompanyHeader: React.FC<{ exp: ExperienceData }> = ({ exp }) => (
-  <div className="mb-10 flex flex-col justify-between gap-8 border-b border-[#30363D] pb-8 lg:flex-row lg:items-start">
+  <div className="mb-8 flex flex-col justify-between gap-6 border-b border-[#30363D] pb-6 sm:mb-10 sm:gap-8 sm:pb-8 lg:flex-row lg:items-start">
     <div>
-      <div className="mb-3 flex flex-wrap items-center gap-3">
+      <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2">
         <span className="rounded border border-[#3FB950]/40 bg-[#3FB950]/10 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-[#3FB950]">
           {exp.status}
         </span>
@@ -182,7 +182,7 @@ const CompanyHeader: React.FC<{ exp: ExperienceData }> = ({ exp }) => (
         </span>
       </div>
 
-      <h3 className="font-black text-3xl uppercase tracking-tight text-white sm:text-5xl">
+      <h3 className="font-black text-[length:clamp(1.75rem,8vw,3rem)] uppercase leading-none tracking-tight text-white">
         {exp.company}
       </h3>
 
@@ -191,7 +191,7 @@ const CompanyHeader: React.FC<{ exp: ExperienceData }> = ({ exp }) => (
       </p>
     </div>
 
-    <div className="max-w-md rounded-lg border border-[#30363D] bg-[#0D1117] px-4 py-3 font-mono text-[10px] leading-relaxed text-[#8B949E]">
+    <div className="max-w-md shrink-0 rounded-lg border border-[#30363D] bg-[#0D1117] px-4 py-3 font-mono text-[10px] leading-relaxed text-[#8B949E]">
       PRIMARY STACK
       <div className="mt-1 text-[#C9D1D9]">
         MERN · Next.js · TypeScript · Go · PostgreSQL
@@ -207,8 +207,8 @@ const CompanyHeader: React.FC<{ exp: ExperienceData }> = ({ exp }) => (
 const ProgressionGrid: React.FC<{
   phases: ExperienceData['progression'];
 }> = ({ phases }) => (
-  <div className="mb-12">
-    <div className="mb-6 flex items-center justify-between border-b border-[#30363D]/80 pb-3">
+  <div className="mb-10 sm:mb-12">
+    <div className="mb-6 flex items-center justify-between gap-4 border-b border-[#30363D]/80 pb-3">
       <span className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-widest text-[#C9D1D9]">
         <Layers className="h-4 w-4 text-[#3FB950]" />
         ENGINEERING PROGRESSION
@@ -224,7 +224,7 @@ const ProgressionGrid: React.FC<{
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-60px' }}
-      className="grid grid-cols-1 gap-4 md:grid-cols-3"
+      className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-3"
     >
       {phases.map((phase) => (
         <motion.div
@@ -281,8 +281,8 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-end justify-between border-b border-[#30363D]/80 pb-3">
-        <div>
+      <div className="flex items-end justify-between gap-4 border-b border-[#30363D]/80 pb-3">
+        <div className="min-w-0">
           <div className="mb-2 flex items-center gap-2">
             <Cpu className="h-4 w-4 text-[#3FB950]" />
             <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#C9D1D9]">
@@ -294,7 +294,7 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <NavButton onClick={goToPrevious} label="Previous project">
             <ArrowLeft className="h-4 w-4" />
           </NavButton>
@@ -321,11 +321,11 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
               if (info.offset.x < -80) goToNext();
               else if (info.offset.x > 80) goToPrevious();
             }}
-            className="group cursor-grab rounded-2xl border border-[#3FB950]/40 bg-[#0D1117] p-6 active:cursor-grabbing sm:p-8 lg:p-10"
+            className="group cursor-grab rounded-2xl border border-[#3FB950]/40 bg-[#0D1117] p-4 active:cursor-grabbing sm:p-8 lg:p-10"
           >
             {/* Project header */}
-            <div className="mb-8 flex flex-col gap-6 border-b border-[#30363D]/70 pb-7 sm:flex-row sm:items-start sm:justify-between">
-              <div className="flex gap-4">
+            <div className="mb-6 flex flex-col gap-4 border-b border-[#30363D]/70 pb-6 sm:mb-8 sm:gap-6 sm:pb-7 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex min-w-0 flex-col gap-3 min-[400px]:flex-row sm:gap-4">
                 <div
                   className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border"
                   style={{
@@ -337,8 +337,8 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
                   <Icon className="h-5 w-5" />
                 </div>
 
-                <div>
-                  <div className="mb-2 flex flex-wrap items-center gap-3">
+                <div className="min-w-0">
+                  <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
                     <span className="font-mono text-[10px] font-bold text-[#3FB950]">
                       {project.code}
                     </span>
@@ -348,7 +348,7 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
                     </span>
                   </div>
 
-                  <h4 className="text-2xl font-black uppercase tracking-tight text-white sm:text-3xl">
+                  <h4 className="break-words text-xl font-black uppercase tracking-tight text-white sm:text-3xl">
                     {project.title}
                   </h4>
                 </div>
@@ -361,12 +361,12 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
             </div>
 
             {/* Description */}
-            <p className="mb-10 max-w-5xl text-sm leading-7 text-[#8B949E] sm:text-base">
+            <p className="mb-8 max-w-5xl text-sm leading-7 sm:mb-10 text-[#8B949E] sm:text-base">
               {project.description}
             </p>
 
             {/* Content */}
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+            <div className="grid grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-12">
               {/* Contributions */}
               <div className="lg:col-span-8">
                 <div className="mb-4 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-[#8B949E]">
@@ -426,7 +426,7 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-2">
+      <div className="flex items-center justify-between gap-4 pt-2">
         {/* Indicators */}
         <div className="flex items-center gap-2">
           {projects.map((p, index) => (
@@ -434,7 +434,7 @@ const ProjectCarousel: React.FC<{ projects: ExperienceProject[] }> = ({
               key={p.code}
               type="button"
               onClick={() => goToProject(index)}
-              className="group flex items-center gap-2"
+              className="group -mx-1.5 -my-4 flex items-center gap-2 px-1.5 py-4"
               aria-label={`Go to ${p.title}`}
             >
               <span
@@ -480,18 +480,18 @@ export const ExperienceTimeline: React.FC = () => {
   return (
     <section
       id="experience"
-      className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117] py-24 sm:py-32 lg:py-40"
+      className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117] section-y"
     >
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-15" />
 
       {/* Container */}
-      <div className="relative z-10 mx-auto w-full max-w-[1920px] px-5 sm:px-8 md:px-12 lg:px-16 xl:px-20 2xl:px-24">
+      <div className="relative z-10 section-container">
         <SectionEyebrow period={currentExp.period} />
         <EditorialHeader overview={currentExp.overview} />
 
         {/* Timeline */}
-        <div className="relative pl-6 sm:pl-10">
+        <div className="relative pl-5 sm:pl-10">
           {/* Timeline line */}
           <motion.div
             initial={prefersReducedMotion ? false : { scaleY: 0 }}
@@ -520,7 +520,7 @@ export const ExperienceTimeline: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="rounded-2xl border border-[#30363D] bg-[#161B22] p-6 shadow-2xl sm:p-10 lg:p-12"
+            className="rounded-2xl border border-[#30363D] bg-[#161B22] p-4 shadow-2xl sm:p-8 md:p-10 lg:p-12"
           >
             <CompanyHeader exp={currentExp} />
             <ProgressionGrid phases={currentExp.progression} />

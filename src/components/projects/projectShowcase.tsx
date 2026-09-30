@@ -26,9 +26,9 @@ const AUTOPLAY_DELAY = 6500;
 const TOTAL = PROJECTS.length;
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-// One shared gutter so the header and the card track line up exactly.
-const GUTTER = 'px-4 sm:px-8 lg:px-12 xl:px-16';
-const SCROLL_GUTTER = 'scroll-px-4 sm:scroll-px-8 lg:scroll-px-12 xl:scroll-px-16';
+// The site-wide fluid gutter, so the header and the card track line up with every other section.
+const GUTTER = 'gutter-x';
+const SCROLL_GUTTER = 'scroll-gutter-x';
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
@@ -297,7 +297,7 @@ export const ProjectShowcase = () => {
         id="work"
         aria-label="Project showcase"
         aria-roledescription="carousel"
-        className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117]/90 py-20 sm:py-28 lg:py-32"
+        className="relative overflow-hidden border-b border-[#30363D] bg-[#0D1117]/90 section-y"
         onPointerEnter={(event) => event.pointerType === 'mouse' && setIsHovered(true)}
         onPointerLeave={(event) => event.pointerType === 'mouse' && setIsHovered(false)}
         onKeyDown={handleKeyDown}
@@ -319,7 +319,7 @@ export const ProjectShowcase = () => {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, amount: 0.4 }}
-              className="grid gap-10 border-b border-[#30363D] pb-10 lg:grid-cols-12 lg:items-end lg:gap-x-12"
+              className="grid gap-8 border-b border-[#30363D] pb-8 sm:gap-10 sm:pb-10 lg:grid-cols-12 lg:items-end lg:gap-x-12"
             >
               <div className="lg:col-span-8">
                 <motion.div
@@ -357,7 +357,7 @@ export const ProjectShowcase = () => {
                   environments.
                 </motion.p>
 
-                <motion.div variants={riseVariants} className="flex items-center gap-3">
+                <motion.div variants={riseVariants} className="flex flex-wrap items-center gap-3">
                   <div
                     className="mr-2 flex items-baseline gap-1.5 font-mono text-sm tabular-nums"
                     aria-live={canAutoplay ? 'off' : 'polite'}
@@ -475,7 +475,7 @@ export const ProjectShowcase = () => {
                   onClick={() => move(index)}
                   aria-label={`Show ${project.title}`}
                   aria-current={isActive ? 'true' : undefined}
-                  className="group px-1 py-3"
+                  className="group -mx-1 -my-1 px-2 py-4"
                 >
                   <span
                     className={`relative block h-1.5 overflow-hidden rounded-full bg-[#30363D] transition-[width,background-color] duration-500 group-hover:bg-[#8B949E] ${

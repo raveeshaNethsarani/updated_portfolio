@@ -13,6 +13,11 @@ import raveeshaPortrait from '../../assets/images/Gemini_Generated_Image_31tv6r3
 import { useIntroReady } from '../animations/IntroContext';
 import { EASE, FINE_POINTER_QUERY, useMediaQuery } from '../animations/motionPresets';
 
+// Name scales with the viewport: fits a 320px phone, then on desktop shrinks in step
+// with the portrait column so the editorial overlap stays the same as at 1440px.
+const NAME_SIZE =
+  'text-[length:clamp(2.75rem,13.6vw,6.5rem)] lg:text-[length:min(8.5rem,max(calc(10.6vw_-_24px),calc(15.2vw_-_83px)))]';
+
 interface HeroSectionProps {
   onOpenResume: () => void;
   homeNavigationCount: number;
@@ -132,19 +137,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       animate={heroEntranceControls}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-12 px-4 sm:px-8 lg:px-12 max-w-[1920px] mx-auto overflow-hidden border-b border-[#30363D]"
+      className="relative min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-12 section-container overflow-hidden border-b border-[#30363D]"
     >
       {/* Background Architectural Grid & Subtle Ambient Glow */}
       <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
 
       <motion.div
         style={{ x: glowX, y: glowY }}
-        className="absolute top-1/4 right-10 w-96 h-96 bg-[#3FB950]/5 rounded-full blur-3xl pointer-events-none animate-ambient-drift"
+        className="absolute top-1/4 right-0 sm:right-10 w-64 h-64 sm:w-96 sm:h-96 bg-[#3FB950]/5 rounded-full blur-3xl pointer-events-none animate-ambient-drift"
       />
 
       <motion.div
         style={{ x: mouseSpringX, y: mouseSpringY }}
-        className="absolute bottom-10 left-10 w-96 h-96 bg-[#58A6FF]/5 rounded-full blur-3xl pointer-events-none animate-ambient-drift-slow"
+        className="absolute bottom-10 left-0 sm:left-10 w-64 h-64 sm:w-96 sm:h-96 bg-[#58A6FF]/5 rounded-full blur-3xl pointer-events-none animate-ambient-drift-slow"
       />
 
       {/* Main Structural Container with Side System Rail */}
@@ -172,16 +177,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Top Status Callout */}
           <motion.div
             {...intro(0.1, 12)}
-            className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-[#30363D]/60"
+            className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-6 pb-4 border-b border-[#30363D]/60"
           >
             <div className="flex items-center gap-3">
-              <span className="mono text-[11px] uppercase tracking-[0.4em] text-[#8B949E]">
+              <span className="mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] sm:tracking-[0.4em] text-[#8B949E]">
                 FULL STACK SYSTEM ENGINEER
               </span>
             </div>
 
-            <div className="flex items-center gap-2 mono text-[11px]">
-              <span className="text-[#8B949E]">[ STATUS ]</span>
+            <div className="flex items-center gap-2 mono text-[10px] sm:text-[11px]">
+              <span className="text-[#8B949E] whitespace-nowrap">[ STATUS ]</span>
 
               <span className="text-[#3FB950] font-semibold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#3FB950] inline-block animate-pulse" />
@@ -197,18 +202,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           >
             <motion.h1
               {...intro(0.2, 40)}
-              className="text-[56px] sm:text-[84px] md:text-[104px] lg:text-[124px] xl:text-[136px] leading-[0.82] font-black uppercase tracking-tighter text-[#C9D1D9]"
+              className={`${NAME_SIZE} leading-[0.82] font-black uppercase tracking-tighter text-[#C9D1D9]`}
             >
               RAVEESHA
             </motion.h1>
 
             <motion.div
               style={{ y: typoScrollY }}
-              className="relative z-20 select-none -mt-4 sm:-mt-6 lg:mt-10"
+              className="relative z-20 select-none mt-1.5 sm:mt-2 lg:mt-[clamp(1.5rem,2.8vw,2.5rem)]"
             >
               <motion.h1
                 {...intro(0.32, 40)}
-                className="text-[56px] sm:text-[84px] md:text-[104px] lg:text-[124px] xl:text-[136px] leading-[0.82] font-black uppercase tracking-tighter text-outline hover:text-outline-strong transition-all duration-300"
+                className={`${NAME_SIZE} leading-[0.82] font-black uppercase tracking-tighter text-outline hover:text-outline-strong transition-all duration-300`}
               >
                 NETHSARANI
               </motion.h1>
@@ -216,7 +221,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </motion.div>
 
           {/* Middle Intersecting Composition: Manifesto & Oversized Editorial Portrait */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center my-2 sm:my-4 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center mt-5 mb-2 sm:my-4 relative">
             {/* Left Column: Manifesto & Action Ribbon */}
             <div className="lg:col-span-7 xl:col-span-7 z-20 space-y-6">
               {/* Manifesto Statement with Left Accent Line */}
@@ -252,11 +257,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
 
               {/* Action Buttons */}
-              <motion.div {...intro(0.66, 16)} className="flex flex-wrap items-center gap-4 pt-2">
+              <motion.div {...intro(0.66, 16)} className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
                 <a
                   href="#work"
                   id="hero-explore-work-btn"
-                  className="motion-btn group inline-flex items-center gap-3 px-6 py-3.5 bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] mono text-xs tracking-wider font-bold rounded-lg transition-all duration-200 shadow-lg shadow-[#3FB950]/15"
+                  className="motion-btn group inline-flex flex-1 basis-[10rem] sm:flex-none sm:basis-auto justify-center items-center gap-3 px-6 py-3.5 bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] mono text-xs tracking-wider font-bold rounded-lg transition-all duration-200 shadow-lg shadow-[#3FB950]/15"
                 >
                   <span>EXPLORE WORK</span>
 
@@ -266,7 +271,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <button
                   onClick={onOpenResume}
                   id="hero-view-resume-btn"
-                  className="motion-btn group inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#161B22] hover:bg-[#21262D] text-[#C9D1D9] border border-[#30363D] hover:border-[#8B949E] mono text-xs tracking-wider font-semibold rounded-lg transition-all duration-200 cursor-pointer"
+                  className="motion-btn group inline-flex flex-1 basis-[10rem] sm:flex-none sm:basis-auto justify-center items-center gap-2.5 px-6 py-3.5 bg-[#161B22] hover:bg-[#21262D] text-[#C9D1D9] border border-[#30363D] hover:border-[#8B949E] mono text-xs tracking-wider font-semibold rounded-lg transition-all duration-200 cursor-pointer"
                 >
                   <FileText className="motion-icon motion-icon-up w-4 h-4 text-[#58A6FF]" />
 
@@ -276,7 +281,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             {/* Right/Intersecting Column: Editorial Portrait Element */}
-           <div className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end relative lg:-mt-60">
+           <div className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end relative lg:-mt-[min(15rem,calc(19.2vw_-_36px))]">
               <motion.div
                 style={{
                   x: mouseSpringX,

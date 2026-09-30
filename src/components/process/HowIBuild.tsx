@@ -257,7 +257,7 @@ export const HowIBuild: React.FC = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className={`w-full flex flex-col justify-between py-16 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-[1920px] mx-auto overflow-hidden select-none ${
+          className={`w-full flex flex-col justify-between py-16 sm:py-20 section-container overflow-hidden select-none ${
             isDesktopPinned ? 'h-screen sticky top-0' : 'min-h-[85vh]'
           }`}
         >
@@ -267,12 +267,12 @@ export const HowIBuild: React.FC = () => {
           {/* Section Header */}
           <motion.div
             variants={headerReveal}
-            className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#30363D] pb-6 relative z-10"
+            className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#30363D] pb-5 sm:pb-6 relative z-10"
           >
             <div>
               <motion.div
                 variants={fadeUpReveal}
-                className="flex items-center gap-2 text-[#3FB950] mono text-xs tracking-widest uppercase mb-2"
+                className="flex items-center gap-2 text-[#3FB950] mono text-[10px] sm:text-xs tracking-widest uppercase mb-2 text-balance"
               >
                 <Terminal className="w-3.5 h-3.5" />
                 <span>ENGINEERING METHODOLOGY // PIPELINE</span>
@@ -358,7 +358,7 @@ export const HowIBuild: React.FC = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -15, scale: 0.99 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className="bg-[#161B22] border border-[#30363D] rounded-2xl p-6 sm:p-10 shadow-2xl relative overflow-hidden"
+                className="bg-[#161B22] border border-[#30363D] rounded-2xl p-5 sm:p-8 lg:p-10 shadow-2xl relative overflow-hidden"
               >
                 {/* Accent corner line */}
                 <div
@@ -406,20 +406,20 @@ export const HowIBuild: React.FC = () => {
 
                 {/* Deliverables Checklist */}
                 <div className="border-t border-[#30363D]/80 pt-6">
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between gap-3 mb-3">
                     <span className="font-mono text-xs text-[#C9D1D9] tracking-wider uppercase font-semibold">
                       KEY ENGINEERING DELIVERABLES:
                     </span>
                     <div className="flex items-center gap-2 lg:hidden">
                       <button
                         onClick={handlePrev}
-                        className="px-2 py-1 rounded bg-[#21262D] text-[#8B949E] hover:text-white text-[10px] font-mono border border-[#30363D]"
+                        className="px-3 py-2 rounded bg-[#21262D] text-[#8B949E] hover:text-white text-[10px] font-mono border border-[#30363D]"
                       >
                         PREV
                       </button>
                       <button
                         onClick={handleNext}
-                        className="px-2 py-1 rounded bg-[#21262D] text-[#3FB950] hover:text-white text-[10px] font-mono border border-[#30363D]"
+                        className="px-3 py-2 rounded bg-[#21262D] text-[#3FB950] hover:text-white text-[10px] font-mono border border-[#30363D]"
                       >
                         NEXT
                       </button>
