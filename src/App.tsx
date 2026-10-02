@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { MotionConfig } from 'motion/react';
 import { CinematicLoader } from './components/loader/CinematicLoader';
 import { FloatingNav } from './components/navigation/FloatingNav';
 import { HeroSection } from './components/hero/HeroSection';
@@ -16,6 +17,7 @@ import { GalaxyBackground } from './components/background/GalaxyBackground';
 import { CustomCursor } from './components/cursor/CustomCursor';
 import { ProjectItem } from './types';
 import { Terminal } from 'lucide-react';
+import { IntroContext } from './components/animations/IntroContext';
 import { ProjectShowcase } from './components/projects/projectShowcase';
 export default function App() {
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -41,6 +43,8 @@ export default function App() {
   }, [commandBarOpen]);
 
   return (
+    <MotionConfig reducedMotion="user">
+    <IntroContext.Provider value={loadingComplete}>
     <div className="bg-[#0D1117] text-[#C9D1D9] min-h-screen relative selection:bg-[#3FB950]/20 selection:text-[#3FB950]">
       {/* Global Desktop Custom Cursor */}
       <CustomCursor />
@@ -97,9 +101,9 @@ export default function App() {
           <button
             onClick={() => setCommandBarOpen(true)}
             id="quick-terminal-trigger"
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#161B22]/90 hover:bg-[#21262D] text-xs font-mono text-[#8B949E] hover:text-[#C9D1D9] border border-[#30363D] shadow-2xl backdrop-blur-md transition-all cursor-pointer group"
+            className="motion-btn flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#161B22]/90 hover:bg-[#21262D] text-xs font-mono text-[#8B949E] hover:text-[#C9D1D9] border border-[#30363D] shadow-2xl backdrop-blur-md transition-all cursor-pointer group"
           >
-            <Terminal className="w-3.5 h-3.5 text-[#3FB950]" />
+            <Terminal className="motion-icon motion-icon-up w-3.5 h-3.5 text-[#3FB950]" />
             <span className="text-[11px]">COMMAND PALETTE</span>
             <span className="px-1.5 py-0.5 rounded bg-[#0D1117] border border-[#30363D] text-[10px] text-[#8B949E]">
               ⌘K
@@ -126,5 +130,7 @@ export default function App() {
         />
       </div>
     </div>
+    </IntroContext.Provider>
+    </MotionConfig>
   );
 }

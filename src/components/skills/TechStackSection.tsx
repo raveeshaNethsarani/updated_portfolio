@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { ScrollReveal } from '../animations/ScrollReveal';
+import { CountUp } from '../animations/CountUp';
+import { EASE, revealItem } from '../animations/motionPresets';
 import { Search, X } from 'lucide-react';
 import { SKILLS_DATA } from '../../data/skills';
 import { TechIcon } from './TechIcons';
@@ -61,18 +63,18 @@ export const TechStackSection: React.FC = () => {
       : 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-4';
 
   return (
-    <section id="stack" className="relative bg-[#0D1117]/80 py-16 sm:py-20 border-b border-[#30363D]">
+    <section id="stack" className="relative bg-[#0D1117]/80 section-y border-b border-[#30363D]">
       {/* Background Dots */}
       <div className="absolute inset-0 bg-dot-pattern opacity-15 pointer-events-none" />
 
       <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
         {/* Eyebrow */}
-        <ScrollReveal className="flex items-center justify-between border-b border-[#30363D] pb-3 mb-8">
-          <div className="flex items-center gap-3 text-[#3FB950] mono text-xs tracking-[0.3em] uppercase">
-            <span className="w-2 h-2 rounded-full bg-[#3FB950] inline-block" />
-            <span>[ 05 // SYSTEM TOOLCHAIN &amp; RUNTIME CONTRACTS ]</span>
+        <ScrollReveal className="flex items-center justify-between gap-4 border-b border-[#30363D] pb-3 mb-8">
+          <div className="flex min-w-0 items-center gap-3 text-[#3FB950] mono text-[10px] sm:text-xs tracking-[0.2em] lg:tracking-[0.3em] uppercase">
+            <span className="w-2 h-2 shrink-0 rounded-full bg-[#3FB950] inline-block" />
+            <span className="text-balance">[ 05 // SYSTEM TOOLCHAIN &amp; RUNTIME CONTRACTS ]</span>
           </div>
-          <span className="hidden sm:inline-block mono text-[10px] text-[#8B949E] uppercase tracking-widest">
+          <span className="hidden shrink-0 whitespace-nowrap sm:inline-block mono text-[10px] text-[#8B949E] uppercase tracking-widest">
             STRICT TYPE SAFETY &bull; PRODUCTION PROVEN
           </span>
         </ScrollReveal>
@@ -89,7 +91,7 @@ export const TechStackSection: React.FC = () => {
             </p>
             <div className="mono text-xs text-[#3FB950] flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#3FB950] animate-pulse" />
-              <span>TOTAL {totalSkillsCount} PRODUCTION CAPABILITIES</span>
+              <span>TOTAL <CountUp value={totalSkillsCount} /> PRODUCTION CAPABILITIES</span>
             </div>
           </div>
         </ScrollReveal>
@@ -108,7 +110,7 @@ export const TechStackSection: React.FC = () => {
           <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`px-3 py-1.5 rounded-lg text-[11px] font-mono tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+              className={`px-3 py-2 lg:py-1.5 rounded-lg text-[11px] font-mono tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                 selectedCategory === 'all'
                   ? 'bg-[#3FB950] text-[#0D1117] font-bold'
                   : 'text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#21262D]'
@@ -120,7 +122,7 @@ export const TechStackSection: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-mono tracking-wider transition-all whitespace-nowrap cursor-pointer border ${
+                className={`px-3 py-2 lg:py-1.5 rounded-lg text-[11px] font-mono tracking-wider transition-all whitespace-nowrap cursor-pointer border ${
                   selectedCategory === cat.id
                     ? 'bg-[#21262D] text-[#3FB950] border-[#3FB950]/50 font-bold'
                     : 'border-transparent text-[#8B949E] hover:text-[#C9D1D9] hover:bg-[#21262D]'
@@ -153,7 +155,7 @@ export const TechStackSection: React.FC = () => {
         </div>
 
         {/* Inspector strip — shows notes instead of taking card height */}
-        <div className="h-9 mb-5 flex items-center justify-between gap-4 px-3 rounded-lg border border-dashed border-[#30363D] bg-[#0D1117]/60 font-mono text-[11px] overflow-hidden">
+        <div className="h-9 mb-5 hidden md:flex items-center justify-between gap-4 px-3 rounded-lg border border-dashed border-[#30363D] bg-[#0D1117]/60 font-mono text-[11px] overflow-hidden">
           {/* <div className="flex items-center gap-2 min-w-0">
             {activeSkill ? (
               <>
@@ -181,17 +183,17 @@ export const TechStackSection: React.FC = () => {
         {/* Category grid — horizontal, compact */}
         {visibleCategories.length > 0 ? (
           <ScrollReveal
-            className={`grid ${gridCols} gap-4 mb-14`}
+            className={`grid ${gridCols} gap-3 sm:gap-4 mb-10 sm:mb-14`}
             onMouseLeave={() => setActiveSkill(null)}
             amount={0.08}
+            stagger={0.08}
           >
             {visibleCategories.map((category) => (
               <motion.div
                 layout
                 key={category.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25 }}
+                variants={revealItem}
+                transition={{ layout: { duration: 0.35, ease: EASE } }}
                 className="flex flex-col bg-[#161B22]/70 border border-[#30363D]/80 rounded-xl p-4 backdrop-blur-sm hover:border-[#30363D] transition-colors"
               >
                 {/* Card header */}
@@ -229,7 +231,7 @@ export const TechStackSection: React.FC = () => {
                         onFocus={() => setActiveSkill(info)}
                         onClick={() => setActiveSkill(info)}
                         title={skill.notes ? `${skill.level} — ${skill.notes}` : skill.level}
-                        className={`group flex items-center gap-1.5 pl-1.5 pr-2 py-1 rounded-md border bg-[#0D1117]/80 transition-all duration-150 cursor-pointer select-none hover:-translate-y-0.5 ${
+                        className={`group flex items-center gap-1.5 pl-1.5 pr-2 py-1 rounded-md border bg-[#0D1117]/80 transition-all duration-200 cursor-pointer select-none hover:-translate-y-0.5 hover:shadow-[0_6px_16px_-8px_rgba(63,185,80,0.45)] ${
                           isActive
                             ? 'border-[#3FB950]/70 bg-[#161B22]'
                             : skill.highlight
@@ -237,7 +239,7 @@ export const TechStackSection: React.FC = () => {
                             : 'border-[#30363D]/70 hover:border-[#3FB950]/60'
                         }`}
                       >
-                        <span className="w-5 h-5 rounded flex items-center justify-center bg-[#161B22] text-[#8B949E] group-hover:text-white">
+                        <span className="w-5 h-5 rounded flex items-center justify-center bg-[#161B22] text-[#8B949E] group-hover:text-white transition-transform duration-200 group-hover:scale-110">
                           <TechIcon name={skill.name} className="w-3 h-3" colored={true} />
                         </span>
                         <span className="font-mono text-[11px] font-semibold text-[#C9D1D9] group-hover:text-white whitespace-nowrap">
@@ -252,13 +254,13 @@ export const TechStackSection: React.FC = () => {
             ))}
           </ScrollReveal>
         ) : (
-          <div className="mb-14 py-10 text-center font-mono text-xs text-[#8B949E] border border-dashed border-[#30363D] rounded-xl">
+          <div className="mb-10 sm:mb-14 py-10 text-center font-mono text-xs text-[#8B949E] border border-dashed border-[#30363D] rounded-xl">
             No technology matches “{searchQuery}”.
           </div>
         )}
 
         {/* Currently Exploring */}
-        <ScrollReveal>
+        <ScrollReveal stagger={0} amount={0.1}>
           <CurrentlyExploring />
         </ScrollReveal>
       </div>

@@ -1,24 +1,61 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, type Variants } from 'motion/react';
 import { Terminal, Sparkles, ArrowRight, Activity, Server, Cpu, Database, Network } from 'lucide-react';
 import { CURRENTLY_EXPLORING_DATA } from '../../data/skills';
+import { EASE } from '../animations/motionPresets';
+
+// Container fades in first, then its lines reveal one after another.
+const terminalContainer: Variants = {
+  hidden: { opacity: 0, y: 32 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: EASE, staggerChildren: 0.07, delayChildren: 0.2 },
+  },
+};
+
+const terminalLine: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
+};
+
+const topicLine: Variants = {
+  hidden: { opacity: 0, x: -12 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: EASE } },
+};
+
+// Re-plays on every topic switch because the panel is keyed by topic id.
+const detailPanel: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: EASE, staggerChildren: 0.06, delayChildren: 0.05 },
+  },
+};
 
 export const CurrentlyExploring: React.FC = () => {
   const [activeTopicId, setActiveTopicId] = useState<string>('go');
 
   return (
-    <div className="bg-[#161B22] border border-[#30363D] rounded-2xl p-6 sm:p-12 shadow-2xl relative overflow-hidden">
+    <motion.div
+      variants={terminalContainer}
+      className="bg-[#161B22] border border-[#30363D] rounded-2xl p-4 sm:p-8 lg:p-12 shadow-2xl relative overflow-hidden"
+    >
       {/* Subtle Ambient Depth */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#A371F7]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-[#A371F7]/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-[#30363D] pb-8 mb-10">
+      <motion.div
+        variants={terminalLine}
+        className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 border-b border-[#30363D] pb-6 mb-6 sm:pb-8 sm:mb-10"
+      >
         <div>
-          <div className="flex items-center gap-2 text-[#A371F7] font-mono text-xs tracking-[0.3em] uppercase mb-2 font-bold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>[ R&amp;D FRONTIER // ACTIVE INVESTIGATION ]</span>
+          <div className="flex items-center gap-2 text-[#A371F7] font-mono text-[10px] sm:text-xs tracking-[0.2em] lg:tracking-[0.3em] uppercase mb-2 font-bold">
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
+            <span className="text-balance">[ R&amp;D FRONTIER // ACTIVE INVESTIGATION ]</span>
           </div>
-          <h3 className="font-black text-3xl sm:text-5xl text-white tracking-tight uppercase">
+          <h3 className="font-black text-[length:clamp(1.75rem,8vw,3rem)] leading-none text-white tracking-tight uppercase">
             CURRENTLY EXPLORING
           </h3>
         </div>
@@ -27,27 +64,28 @@ export const CurrentlyExploring: React.FC = () => {
           <span className="w-2 h-2 rounded-full bg-[#3FB950] animate-pulse" />
           <span>STATUS: BENCHMARKING &amp; LAB TESTING</span>
         </div>
-      </div>
+      </motion.div>
 
       {/* Interactive Topology Stream & Topic List */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         {/* Left: Interactive Topic Selector */}
-        <div className="lg:col-span-5 space-y-3">
+        <div className="lg:col-span-5 space-y-2 sm:space-y-3">
           {CURRENTLY_EXPLORING_DATA.map((topic, idx) => {
             const isSelected = activeTopicId === topic.id;
             return (
-              <button
+              <motion.button
                 key={topic.id}
+                variants={topicLine}
                 onClick={() => setActiveTopicId(topic.id)}
-                className={`w-full p-4 sm:p-5 rounded-xl border text-left font-mono text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group ${
+                className={`w-full p-3.5 sm:p-5 rounded-xl border text-left font-mono text-xs transition-[background-color,border-color,color,box-shadow] duration-200 cursor-pointer flex items-center justify-between group ${
                   isSelected
                     ? 'bg-[#21262D] border-[#A371F7] text-white shadow-xl'
                     : 'bg-[#0D1117]/80 border-[#30363D]/80 text-[#8B949E] hover:border-[#8B949E]'
                 }`}
               >
-                <div className="flex items-center gap-3.5">
+                <div className="flex min-w-0 items-center gap-3.5">
                   <span
-                    className={`w-2 h-2 rounded-full ${
+                    className={`w-2 h-2 shrink-0 rounded-full ${
                       isSelected ? 'bg-[#A371F7] animate-ping' : 'bg-[#30363D]'
                     }`}
                   />
@@ -62,19 +100,19 @@ export const CurrentlyExploring: React.FC = () => {
                 </div>
 
                 <ArrowRight
-                  className={`w-4 h-4 transition-transform ${
+                  className={`w-4 h-4 shrink-0 ml-3 transition-transform duration-200 ${
                     isSelected
                       ? 'text-[#A371F7] translate-x-1'
-                      : 'text-[#30363D] group-hover:text-[#8B949E]'
+                      : 'text-[#30363D] group-hover:text-[#8B949E] group-hover:translate-x-0.5'
                   }`}
                 />
-              </button>
+              </motion.button>
             );
           })}
         </div>
 
         {/* Right: Active Deep Dive & Flow Visualizer */}
-        <div className="lg:col-span-7">
+        <div className="min-w-0 lg:col-span-7">
           {(() => {
             const current =
               CURRENTLY_EXPLORING_DATA.find((t) => t.id === activeTopicId) ||
@@ -83,13 +121,11 @@ export const CurrentlyExploring: React.FC = () => {
             return (
               <motion.div
                 key={current.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="p-6 sm:p-8 bg-[#0D1117] border border-[#30363D] rounded-xl space-y-6 shadow-inner"
+                variants={detailPanel}
+                className="p-4 sm:p-8 bg-[#0D1117] border border-[#30363D] rounded-xl space-y-5 sm:space-y-6 shadow-inner"
               >
                 {/* Topic Header */}
-                <div className="flex items-center justify-between border-b border-[#30363D] pb-4">
+                <motion.div variants={terminalLine} className="flex items-center justify-between gap-4 border-b border-[#30363D] pb-4">
                   <div>
                     <span className="font-mono text-[10px] text-[#A371F7] uppercase tracking-widest block mb-1 font-semibold">
                       {current.status}
@@ -98,26 +134,26 @@ export const CurrentlyExploring: React.FC = () => {
                       {current.title}
                     </h4>
                   </div>
-                  <Network className="w-6 h-6 text-[#A371F7]" />
-                </div>
+                  <Network className="w-6 h-6 shrink-0 text-[#A371F7]" />
+                </motion.div>
 
                 {/* Description */}
-                <p className="text-sm text-[#C9D1D9] leading-relaxed font-light">
+                <motion.p variants={terminalLine} className="text-sm text-[#C9D1D9] leading-relaxed font-light">
                   {current.description}
-                </p>
+                </motion.p>
 
                 {/* Applied Use Case */}
-                <div className="p-4 sm:p-5 bg-[#161B22] border border-[#30363D] rounded-xl">
+                <motion.div variants={terminalLine} className="p-4 sm:p-5 bg-[#161B22] border border-[#30363D] rounded-xl">
                   <span className="font-mono text-[10px] text-[#58A6FF] uppercase tracking-wider block mb-1.5 font-bold">
                     PRACTICAL APPLICATION &amp; LAB BENCHMARK:
                   </span>
-                  <p className="font-mono text-xs text-[#C9D1D9] leading-relaxed">
+                  <p className="font-mono text-xs text-[#C9D1D9] leading-relaxed break-words">
                     {current.useCase}
                   </p>
-                </div>
+                </motion.div>
 
                 {/* Tags */}
-                <div>
+                <motion.div variants={terminalLine}>
                   <span className="font-mono text-[10px] text-[#8B949E] uppercase tracking-widest block mb-2.5">
                     CORE CONCEPTS &amp; ARCHITECTURAL PATTERNS:
                   </span>
@@ -131,12 +167,12 @@ export const CurrentlyExploring: React.FC = () => {
                       </span>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
             );
           })()}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

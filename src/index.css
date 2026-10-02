@@ -47,6 +47,31 @@ html {
   }
 }
 
+/* ==========================================================================
+   Responsive layout system
+   One horizontal gutter and one vertical section rhythm for every section,
+   scaling fluidly: 16px / 64px on small phones → 48px / 128px on desktop.
+   ========================================================================== */
+
+@utility gutter-x {
+  padding-inline: clamp(1rem, 0.25rem + 3.2vw, 3rem);
+}
+
+@utility scroll-gutter-x {
+  scroll-padding-inline: clamp(1rem, 0.25rem + 3.2vw, 3rem);
+}
+
+@utility section-container {
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 0.25rem + 3.2vw, 3rem);
+}
+
+@utility section-y {
+  padding-block: clamp(4rem, 2rem + 6vw, 8rem);
+}
+
 /* Bold Typography Utilities */
 .mono {
   font-family: 'JetBrains Mono', monospace;
@@ -183,5 +208,143 @@ html {
   .animate-marquee-right {
     animation: none;
     transform: none;
+  }
+}
+
+/* ==========================================================================
+   Motion system — one shared hover language for the whole portfolio.
+   Uses the individual `translate` / `scale` properties so it composes with
+   Framer Motion's inline `transform` without either overriding the other.
+   ========================================================================== */
+
+:root {
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Buttons: tiny lift on hover, press-in on active */
+.motion-btn {
+  transition-property: color, background-color, border-color, box-shadow, opacity, translate, scale;
+  transition-duration: 220ms;
+  transition-timing-function: var(--ease-out-soft);
+}
+
+.motion-btn:active {
+  scale: 0.98;
+}
+
+/* Cards / panels: very subtle lift */
+.motion-lift {
+  transition-property: color, background-color, border-color, box-shadow, translate;
+  transition-duration: 300ms;
+  transition-timing-function: var(--ease-out-soft);
+}
+
+/* Icons / arrows nested inside a hovered .group */
+.motion-icon {
+  transition: translate 220ms var(--ease-out-soft), scale 220ms var(--ease-out-soft);
+}
+
+/* Text links: underline draws in from the left */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 260ms var(--ease-out-soft), color 200ms ease;
+}
+
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .motion-btn:hover {
+    translate: 0 -1px;
+    scale: 1.02;
+  }
+
+  .motion-btn:active {
+    translate: 0 0;
+    scale: 0.98;
+  }
+
+  .motion-btn:disabled {
+    translate: none;
+    scale: none;
+  }
+
+  .motion-lift:hover {
+    translate: 0 -3px;
+    box-shadow: 0 18px 40px -24px rgba(63, 185, 80, 0.28);
+  }
+
+  .group:hover .motion-icon-x {
+    translate: 2px 0;
+  }
+
+  .group:hover .motion-icon-up {
+    translate: 0 -1px;
+  }
+
+  .group:hover .motion-icon-diag {
+    translate: 2px -2px;
+  }
+}
+
+/* Hero ambient glow: very slow drift, never distracting */
+@keyframes ambient-drift {
+  0% {
+    translate: 0 0;
+    opacity: 0.8;
+  }
+  50% {
+    translate: 28px -22px;
+    opacity: 1;
+  }
+  100% {
+    translate: -18px 16px;
+    opacity: 0.85;
+  }
+}
+
+.animate-ambient-drift {
+  animation: ambient-drift 22s ease-in-out infinite alternate;
+  will-change: translate, opacity;
+}
+
+.animate-ambient-drift-slow {
+  animation: ambient-drift 30s ease-in-out -8s infinite alternate-reverse;
+  will-change: translate, opacity;
+}
+
+@media (max-width: 767px) {
+  /* Lightweight mobile: keep the static glow, skip continuous drift */
+  .animate-ambient-drift,
+  .animate-ambient-drift-slow {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-btn,
+  .motion-lift,
+  .motion-icon {
+    transition-property: color, background-color, border-color, box-shadow, opacity;
+  }
+
+  .motion-btn:hover,
+  .motion-btn:active,
+  .motion-lift:hover,
+  .group:hover .motion-icon-x,
+  .group:hover .motion-icon-up,
+  .group:hover .motion-icon-diag {
+    translate: none;
+    scale: none;
+  }
+
+  .animate-ambient-drift,
+  .animate-ambient-drift-slow {
+    animation: none;
   }
 }

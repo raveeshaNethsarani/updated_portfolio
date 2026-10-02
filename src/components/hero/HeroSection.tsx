@@ -10,6 +10,13 @@ import {
 } from 'motion/react';
 import { ArrowDownRight, FileText } from 'lucide-react';
 import raveeshaPortrait from '../../assets/images/Gemini_Generated_Image_31tv6r31tv6r31tv.jpeg';
+import { useIntroReady } from '../animations/IntroContext';
+import { EASE, FINE_POINTER_QUERY, useMediaQuery } from '../animations/motionPresets';
+
+// Name scales with the viewport: fits a 320px phone, then on desktop shrinks in step
+// with the portrait column so the editorial overlap stays the same as at 1440px.
+const NAME_SIZE =
+  'text-[length:clamp(2.75rem,13.6vw,6.5rem)] lg:text-[length:min(8.5rem,max(calc(10.6vw_-_24px),calc(15.2vw_-_83px)))]';
 
 interface HeroSectionProps {
   onOpenResume: () => void;
@@ -25,6 +32,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const heroEntranceControls = useAnimationControls();
   const isHeroInView = useInView(containerRef, { amount: 0.5 });
   const handledHomeNavigation = useRef(homeNavigationCount);
+  const introReady = useIntroReady();
+  const isFinePointer = useMediaQuery(FINE_POINTER_QUERY);
+  const isCompact = useMediaQuery('(max-width: 767px)');
+
+  // Page-load entrance: fade + rise + blur-to-sharp, held until the loader hands over.
+  // Mobile skips the blur; reduced motion keeps only the fade.
+  const blurFrom = shouldReduceMotion || isCompact ? 'blur(0px)' : 'blur(8px)';
+  const intro = (delay: number, distance = 24) => {
+    const hidden = { opacity: 0, y: shouldReduceMotion ? 0 : distance, filter: blurFrom };
+    return {
+      initial: hidden,
+      animate: introReady ? { opacity: 1, y: 0, filter: 'blur(0px)' } : hidden,
+      transition: {
+        duration: shouldReduceMotion ? 0.3 : 0.8,
+        delay: shouldReduceMotion ? 0 : delay,
+        ease: EASE,
+      },
+    };
+  };
 
   useEffect(() => {
     if (homeNavigationCount === handledHomeNavigation.current || !isHeroInView) return;
@@ -57,7 +83,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (shouldReduceMotion) return;
+    if (shouldReduceMotion || !isFinePointer) return;
 
     const rect = containerRef.current?.getBoundingClientRect();
 
@@ -93,6 +119,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     [1, shouldReduceMotion ? 1 : 1.05]
   );
 
+  // Background glows drift a few pixels against the pointer for depth.
+  const glowX = useTransform(mouseSpringX, (v) => v * -1.5);
+  const glowY = useTransform(mouseSpringY, (v) => v * -1.5);
+
   const typoScrollY = useTransform(
     scrollYProgress,
     [0, 1],
@@ -112,15 +142,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Background Architectural Grid & Subtle Ambient Glow */}
       <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
 
-      <div className="absolute top-1/4 right-10 w-96 h-96 bg-[#3FB950]/5 rounded-full blur-3xl pointer-events-none" />
+      <motion.div
+        style={{ x: glowX, y: glowY }}
+        className="absolute top-1/4 right-0 sm:right-10 w-64 h-64 sm:w-96 sm:h-96 bg-[#3FB950]/5 rounded-full blur-3xl pointer-events-none animate-ambient-drift"
+      />
 
-      <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#58A6FF]/5 rounded-full blur-3xl pointer-events-none" />
+      <motion.div
+        style={{ x: mouseSpringX, y: mouseSpringY }}
+        className="absolute bottom-10 left-0 sm:left-10 w-64 h-64 sm:w-96 sm:h-96 bg-[#58A6FF]/5 rounded-full blur-3xl pointer-events-none animate-ambient-drift-slow"
+      />
 
       {/* Main Structural Container with Side System Rail */}
       {/* 1792px = 1920px minus the xl gutters, matching the other sections */}
       <div className="flex flex-col lg:flex-row flex-grow relative z-10 w-full max-w-[1792px] mx-auto my-auto py-6 sm:py-10 gap-6 lg:gap-10">
         {/* Left Side System Architectural Rail (Desktop) */}
-        <div className="hidden lg:flex w-14 border-r border-[#30363D] flex-col items-center justify-between py-6 shrink-0 select-none">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: introReady ? 1 : 0 }}
+          transition={{ duration: 0.8, delay: shouldReduceMotion ? 0 : 0.75, ease: EASE }}
+          className="hidden lg:flex w-14 border-r border-[#30363D] flex-col items-center justify-between py-6 shrink-0 select-none"
+        >
           <span className="vertical-text mono text-[10px] uppercase tracking-[0.5em] text-[#8B949E] opacity-70">
             System Architecture &amp; Design
           </span>
@@ -130,28 +171,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             <div className="w-[1px] h-24 bg-gradient-to-b from-[#3FB950] via-[#3FB950]/50 to-transparent" />
           </div>
-        </div>
+        </motion.div>
 
         {/* Central Typographic Stage with Editorial Portrait Intersection */}
         <div className="flex-grow flex flex-col justify-center relative">
           {/* Top Status Callout */}
           <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.7,
-              delay: 0.1,
-            }}
-            className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-[#30363D]/60"
+            {...intro(0.1, 12)}
+            className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-6 pb-4 border-b border-[#30363D]/60"
           >
             <div className="flex items-center gap-3">
-              <span className="mono text-[11px] uppercase tracking-[0.4em] text-[#8B949E]">
+              <span className="mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] sm:tracking-[0.4em] text-[#8B949E]">
                 FULL STACK SYSTEM ENGINEER
               </span>
             </div>
 
-            <div className="flex items-center gap-2 mono text-[11px]">
-              <span className="text-[#8B949E]">[ STATUS ]</span>
+            <div className="flex items-center gap-2 mono text-[10px] sm:text-[11px]">
+              <span className="text-[#8B949E] whitespace-nowrap">[ STATUS ]</span>
 
               <span className="text-[#3FB950] font-semibold uppercase tracking-wider flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#3FB950] inline-block animate-pulse" />
@@ -180,7 +216,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             <motion.div
               style={{ y: typoScrollY }}
-              className="relative z-20 select-none -mt-4 sm:-mt-6 lg:mt-10"
+              className="relative z-20 select-none mt-1.5 sm:mt-2 lg:mt-[clamp(1.5rem,2.8vw,2.5rem)]"
             >
               <motion.h1
                 initial={{ y: 40, opacity: 0 }}
@@ -198,21 +234,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </motion.div>
 
           {/* Middle Intersecting Composition: Manifesto & Oversized Editorial Portrait */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center my-2 sm:my-4 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center mt-5 mb-2 sm:my-4 relative">
             {/* Left Column: Manifesto & Action Ribbon */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                duration: 0.85,
-                delay: 0.4,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="lg:col-span-7 xl:col-span-7 z-20 space-y-6"
-            >
+            <div className="lg:col-span-7 xl:col-span-7 z-20 space-y-6">
               {/* Manifesto Statement with Left Accent Line */}
               <div className="border-l-2 border-[#3FB950] pl-6 sm:pl-8">
-                <p className="text-xl sm:text-2xl md:text-3xl font-light leading-relaxed text-[#C9D1D9] tracking-tight">
+                <motion.p
+                  {...intro(0.46, 20)}
+                  className="text-xl sm:text-2xl md:text-3xl font-light leading-relaxed text-[#C9D1D9] tracking-tight"
+                >
                  I turn complex   {' '}
                   <span className="italic font-medium text-[#C9D1D9]">
                     ideas
@@ -220,10 +250,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   into scalable digital{' '}
                   <span className="italic font-semibold text-[#A371F7] underline underline-offset-8 decoration-1">systems</span>
                   .
-                </p>
+                </motion.p>
 
                 {/* Current Core Stack */}
-                <div className="flex flex-wrap gap-8 mt-6 pt-4 border-t border-[#30363D]/40">
+                <motion.div
+                  {...intro(0.56, 16)}
+                  className="flex flex-wrap gap-8 mt-6 pt-4 border-t border-[#30363D]/40"
+                >
                   <div className="flex flex-col gap-1">
                     <span className="mono text-[10px] uppercase text-[#8B949E] tracking-widest font-semibold">
                       CURRENT CORE STACK
@@ -233,35 +266,35 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       Next.js / TypeScript / MERN / Go / PostgreSQL 
                     </span>
                   </div>
-                </div>
+                </motion.div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              <motion.div {...intro(0.66, 16)} className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
                 <a
                   href="#work"
                   id="hero-explore-work-btn"
-                  className="group inline-flex items-center gap-3 px-6 py-3.5 bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] mono text-xs tracking-wider font-bold rounded-lg transition-all duration-200 shadow-lg shadow-[#3FB950]/15"
+                  className="motion-btn group inline-flex flex-1 basis-[10rem] sm:flex-none sm:basis-auto justify-center items-center gap-3 px-6 py-3.5 bg-[#3FB950] hover:bg-[#46c95a] text-[#0D1117] mono text-xs tracking-wider font-bold rounded-lg transition-all duration-200 shadow-lg shadow-[#3FB950]/15"
                 >
                   <span>EXPLORE WORK</span>
 
-                  <ArrowDownRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
+                  <ArrowDownRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform duration-200" />
                 </a>
 
                 <button
                   onClick={onOpenResume}
                   id="hero-view-resume-btn"
-                  className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#161B22] hover:bg-[#21262D] text-[#C9D1D9] border border-[#30363D] hover:border-[#8B949E] mono text-xs tracking-wider font-semibold rounded-lg transition-all duration-200 cursor-pointer"
+                  className="motion-btn group inline-flex flex-1 basis-[10rem] sm:flex-none sm:basis-auto justify-center items-center gap-2.5 px-6 py-3.5 bg-[#161B22] hover:bg-[#21262D] text-[#C9D1D9] border border-[#30363D] hover:border-[#8B949E] mono text-xs tracking-wider font-semibold rounded-lg transition-all duration-200 cursor-pointer"
                 >
-                  <FileText className="w-4 h-4 text-[#58A6FF]" />
+                  <FileText className="motion-icon motion-icon-up w-4 h-4 text-[#58A6FF]" />
 
                   <span>VIEW RESUME</span>
                 </button>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
 
             {/* Right/Intersecting Column: Editorial Portrait Element */}
-           <div className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end relative lg:-mt-60">
+           <div className="lg:col-span-5 xl:col-span-5 flex justify-center lg:justify-end relative lg:-mt-[min(15rem,calc(19.2vw_-_36px))]">
               <motion.div
                 style={{
                   x: mouseSpringX,
@@ -274,15 +307,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   clipPath:
                     'polygon(0 100%, 100% 100%, 100% 100%, 0 100%)',
                 }}
-                animate={{
-                  opacity: 1,
-                  scale: 1,
-                  clipPath:
-                    'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)',
-                }}
+                animate={
+                  introReady
+                    ? {
+                        opacity: 1,
+                        scale: 1,
+                        clipPath:
+                          'polygon(0 0%, 100% 0%, 100% 100%, 0 100%)',
+                      }
+                    : undefined
+                }
                 transition={{
                   duration: 1.2,
-                  delay: 0.35,
+                  delay: shouldReduceMotion ? 0 : 0.4,
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 className="relative group w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[420px] aspect-[3/4] rounded-2xl overflow-hidden bg-[#161B22] border border-[#30363D] shadow-2xl z-10"

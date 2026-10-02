@@ -4,6 +4,9 @@ import { Terminal, X, Search, ArrowRight, CornerDownLeft, Sparkles, FileText, Ma
 import { PROJECTS_DATA } from '../../data/projects';
 import { ProjectItem } from '../../types';
 
+const scrollBehavior = (): ScrollBehavior =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
 interface SystemCommandBarProps {
   isOpen: boolean;
   onClose: () => void;
@@ -68,7 +71,7 @@ export const SystemCommandBar: React.FC<SystemCommandBarProps> = ({
         onClose();
         navigator.clipboard.writeText('raveesha.nethsarani.dev@gmail.com');
         const el = document.getElementById('contact');
-        el?.scrollIntoView({ behavior: 'smooth' });
+        el?.scrollIntoView({ behavior: scrollBehavior() });
       }
     },
     {
@@ -79,7 +82,7 @@ export const SystemCommandBar: React.FC<SystemCommandBarProps> = ({
       action: () => {
         onClose();
         const el = document.getElementById('how-i-build');
-        el?.scrollIntoView({ behavior: 'smooth' });
+        el?.scrollIntoView({ behavior: scrollBehavior() });
       }
     },
     {
@@ -90,7 +93,7 @@ export const SystemCommandBar: React.FC<SystemCommandBarProps> = ({
       action: () => {
         onClose();
         const el = document.getElementById('stack');
-        el?.scrollIntoView({ behavior: 'smooth' });
+        el?.scrollIntoView({ behavior: scrollBehavior() });
       }
     }
   ];
@@ -144,7 +147,7 @@ export const SystemCommandBar: React.FC<SystemCommandBarProps> = ({
           </div>
 
           {/* Results List */}
-          <div className="p-3 max-h-96 overflow-y-auto space-y-3 no-scrollbar">
+          <div className="p-3 max-h-[min(24rem,55dvh)] overflow-y-auto space-y-3 no-scrollbar">
             {/* Quick Actions */}
             {filteredCommands.length > 0 && (
               <div>

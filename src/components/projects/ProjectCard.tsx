@@ -42,9 +42,10 @@ export const ProjectCard = ({ project, index, isActive }: ProjectCardProps) => {
       onMouseMove={handleMouseMove}
       initial={false}
       animate={{ opacity: isActive ? 1 : 0.78 }}
-      whileHover={{ y: -6, opacity: 1 }}
+      whileHover={{ y: -4, scale: 1.01, opacity: 1 }}
       transition={{
-        y: { type: 'spring', stiffness: 300, damping: 22 },
+        y: { type: 'spring', stiffness: 300, damping: 26 },
+        scale: { type: 'spring', stiffness: 300, damping: 26 },
         opacity: { duration: 0.4 },
       }}
       className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-[#161B22]/90 backdrop-blur-xl transition-[border-color,box-shadow] duration-500 ${
@@ -82,7 +83,7 @@ export const ProjectCard = ({ project, index, isActive }: ProjectCardProps) => {
             draggable={false}
             onLoad={() => setImageLoaded(true)}
             onError={() => setImageFailed(true)}
-            className={`h-full w-full object-cover transition-[transform,opacity,filter] duration-700 ease-out group-hover:scale-[1.06] ${
+            className={`h-full w-full object-cover transition-[transform,opacity,filter] duration-700 ease-out group-hover:scale-[1.04] ${
               imageLoaded ? 'opacity-100 blur-0' : 'opacity-0 blur-sm'
             }`}
           />
@@ -152,9 +153,12 @@ export const ProjectCard = ({ project, index, isActive }: ProjectCardProps) => {
               draggable={false}
               data-cursor="link"
               aria-label={`View ${project.title} source code on GitHub`}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#30363D] bg-[#21262D] px-3.5 py-2 font-mono text-[11px] text-[#C9D1D9] transition-colors duration-300 hover:border-[#8B949E] hover:text-white"
+              className="group/code inline-flex items-center gap-1.5 rounded-lg border border-[#30363D] bg-[#21262D] px-3.5 py-2 font-mono text-[11px] text-[#C9D1D9] transition-colors duration-300 hover:border-[#8B949E] hover:text-white"
             >
-              <Github className="h-3.5 w-3.5" aria-hidden="true" />
+              <Github
+                className="h-3.5 w-3.5 transition-transform duration-300 group-hover/code:-translate-y-0.5"
+                aria-hidden="true"
+              />
               Code
             </a>
           )}

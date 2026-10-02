@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { FINE_POINTER_QUERY, useMediaQuery } from '../animations/motionPresets';
 
 type CursorVariant = 'default' | 'link' | 'project' | 'tech' | 'explore';
 
@@ -7,6 +8,13 @@ export const CustomCursor: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [variant, setVariant] = useState<CursorVariant>('default');
   const [customLabel, setCustomLabel] = useState<string>('');
+  const [isPressed, setIsPressed] = useState(false);
+
+  // Desktop only: no touch / tablet devices and no reduced-motion users.
+  const isFinePointer = useMediaQuery(FINE_POINTER_QUERY);
+  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const isEnabled = isFinePointer && !prefersReducedMotion;
+  const isVisibleRef = useRef(false);
 
   const cursorRef = useRef<HTMLDivElement | null>(null);
   const targetPos = useRef({ x: -100, y: -100 });
@@ -14,17 +22,25 @@ export const CustomCursor: React.FC = () => {
   const rafId = useRef<number | null>(null);
 
   useEffect(() => {
-    // Only enable on desktop pointer devices with fine control and without reduced motion
-    const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!isFinePointer || prefersReducedMotion) {
+    if (!isEnabled) {
+      isVisibleRef.current = false;
+      setIsVisible(false);
       return;
     }
 
+    const show = (visible: boolean) => {
+      if (isVisibleRef.current === visible) return;
+      isVisibleRef.current = visible;
+      setIsVisible(visible);
+    };
+
     const handleMouseMove = (e: MouseEvent) => {
       targetPos.current = { x: e.clientX, y: e.clientY };
-      if (!isVisible) setIsVisible(true);
+      if (!isVisibleRef.current) {
+        // Appear exactly under the pointer instead of sliding in from the corner.
+        currentPos.current = { x: e.clientX, y: e.clientY };
+        show(true);
+      }
 
       // Check hovered element context
       const target = e.target as HTMLElement | null;
@@ -58,13 +74,10 @@ export const CustomCursor: React.FC = () => {
       }
     };
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
-
-    const handleMouseEnter = () => {
-      setIsVisible(true);
-    };
+    const handleMouseLeave = () => show(false);
+    const handleMouseEnter = () => show(true);
+    const handleMouseDown = () => setIsPressed(true);
+    const handleMouseUp = () => setIsPressed(false);
 
     // Smooth Lerp Animation Loop
     const updatePosition = () => {
@@ -82,17 +95,21 @@ export const CustomCursor: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
     document.addEventListener('mouseenter', handleMouseEnter);
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
     rafId.current = requestAnimationFrame(updatePosition);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-  }, [isVisible]);
+  }, [isEnabled]);
 
-  if (!isVisible) return null;
+  if (!isEnabled || !isVisible) return null;
 
   // Calculate size and appearance based on variant
   const getVariantStyles = () => {
@@ -121,7 +138,8 @@ export const CustomCursor: React.FC = () => {
       }}
     >
       <div
-        className={`rounded-full flex items-center justify-center transition-all duration-200 ease-out backdrop-blur-[1px] ${getVariantStyles()}`}
+        className={`rounded-full flex items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] backdrop-blur-[1px] ${getVariantStyles()}`}
+        style={isPressed ? { scale: '0.88' } : undefined}
       >
         {variant === 'default' && (
           <div className="w-1.5 h-1.5 rounded-full bg-[#3FB950]" />
