@@ -257,12 +257,15 @@ export const HowIBuild: React.FC = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className={`w-full flex flex-col justify-between py-16 sm:py-20 px-4 sm:px-8 lg:px-12 max-w-[1920px] mx-auto overflow-hidden select-none ${
+          className={`w-full flex flex-col justify-between py-16 sm:py-20 px-4 sm:px-8 lg:px-12 xl:px-16 overflow-hidden select-none ${
             isDesktopPinned ? 'h-screen sticky top-0' : 'min-h-[85vh]'
           }`}
         >
           {/* Background Grid Pattern */}
           <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
+
+          {/* 1792px = 1920px minus the xl gutters, matching the other sections; the background still spans ultra-wide screens */}
+          <div className="relative z-10 mx-auto flex w-full max-w-[1792px] flex-1 flex-col justify-between">
 
           {/* Section Header */}
           <motion.div
@@ -279,7 +282,7 @@ export const HowIBuild: React.FC = () => {
               </motion.div>
               <motion.h2
                 variants={fadeUpReveal}
-                className="text-3xl sm:text-5xl font-black text-[#C9D1D9] tracking-tight uppercase"
+                className="text-3xl sm:text-5xl lg:text-6xl 2xl:text-7xl font-black text-[#C9D1D9] tracking-tight uppercase"
               >
                 HOW I BUILD
               </motion.h2>
@@ -290,7 +293,7 @@ export const HowIBuild: React.FC = () => {
               className="flex items-center gap-4 font-mono text-xs text-[#8B949E]"
             >
               <span>STEP {activeStep.number} OF 07</span>
-              <div className="w-24 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
+              <div className="w-24 lg:w-40 2xl:w-56 h-1.5 bg-[#21262D] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[#3FB950] transition-all duration-300"
                   style={{ width: `${((activeStepIdx + 1) / BUILD_STEPS.length) * 100}%` }}
@@ -452,6 +455,7 @@ export const HowIBuild: React.FC = () => {
             <span>{isDesktopPinned ? 'CONTINUOUS CYCLE: SCROLL DOWN TO PROGRESS' : 'ENGINEERING ITERATION CYCLE'}</span>
           </div>
       </div> */}
+          </div>
         </motion.div>
       </section>
     </MotionConfig>

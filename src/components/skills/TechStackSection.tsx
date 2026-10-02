@@ -65,7 +65,7 @@ export const TechStackSection: React.FC = () => {
       {/* Background Dots */}
       <div className="absolute inset-0 bg-dot-pattern opacity-15 pointer-events-none" />
 
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
         {/* Eyebrow */}
         <ScrollReveal className="flex items-center justify-between border-b border-[#30363D] pb-3 mb-8">
           <div className="flex items-center gap-3 text-[#3FB950] mono text-xs tracking-[0.3em] uppercase">
@@ -79,10 +79,10 @@ export const TechStackSection: React.FC = () => {
 
         {/* Header — single horizontal row */}
         <ScrollReveal delay={0.06} className="flex flex-col lg:flex-row lg:items-end justify-between gap-5 mb-8">
-          <h2 className="font-black text-4xl sm:text-5xl xl:text-[9rem] text-[#C9D1D9] tracking-tighter uppercase leading-[0.9]">
+          <h2 className="font-black text-4xl sm:text-5xl lg:text-[clamp(5rem,8.75vw,11rem)] text-[#C9D1D9] tracking-tighter uppercase leading-[0.9]">
             TECHNICAL <span className="text-outline">TOOLCHAIN.</span>
           </h2>
-          <div className="lg:max-w-md space-y-2">
+          <div className="lg:max-w-md 2xl:max-w-lg xl:shrink-0 space-y-2">
             <p className="mono text-xs text-[#8B949E] leading-relaxed">
               Curated architectural dependencies and runtimes — paired with strict type soundness,
               operational reliability, and observable execution.
@@ -101,7 +101,7 @@ export const TechStackSection: React.FC = () => {
         <TechMarquee />
       </div> */}
 
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
 
         {/* Toolbar: tabs + search */}
         <div className="flex flex-col lg:flex-row lg:items-center gap-3 mb-3 bg-[#161B22]/80 border border-[#30363D] p-2.5 rounded-xl backdrop-blur-md">
