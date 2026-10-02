@@ -29,7 +29,7 @@ export const AboutSection: React.FC = () => {
       <div className="pointer-events-none absolute inset-0 bg-dot-pattern opacity-15" />
 
       {/* Main Container */}
-      <div className="relative z-10 mx-auto w-full max-w-[1920px] px-4 sm:px-8 lg:px-12 xl:px-16">
+      <div className="relative z-10 section-container">
         
         {/* Section Header */}
         <ScrollReveal className="mb-10 flex items-center justify-between border-b border-[#30363D] pb-4 sm:mb-16 lg:mb-24">
@@ -40,7 +40,7 @@ export const AboutSection: React.FC = () => {
         </ScrollReveal>
 
         {/* Main Editorial Layout */}
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 xl:gap-20">
+        <div className="grid grid-cols-1 gap-12 sm:gap-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 xl:gap-20">
           
           {/* =========================================================
               LEFT — MASSIVE HEADLINE
@@ -86,7 +86,7 @@ export const AboutSection: React.FC = () => {
               RIGHT — BIOGRAPHY + CREDENTIALS + QUOTE
           ========================================================== */}
           <div>
-            <ScrollReveal delay={0.08} className="space-y-10">
+            <ScrollReveal delay={0.08} stagger={0.1} className="space-y-10">
 
               {/* Biography */}
               <div className="space-y-6 text-[#C9D1D9]/90 ">
@@ -161,7 +161,7 @@ export const AboutSection: React.FC = () => {
 
 
          {/* Credential Cards */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 mx-auto max-w-[1920px] px-4 pt-10 sm:px-8 lg:px-12 xl:px-16">
+              <div className="relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2 section-container pt-10 sm:pt-12">
 
                 {/* Work */}
                 <ScrollReveal delay={0.05} className="motion-lift group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#3FB950]/50">
