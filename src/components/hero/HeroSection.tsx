@@ -137,7 +137,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       animate={heroEntranceControls}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-12 section-container overflow-hidden border-b border-[#30363D]"
+      className="relative min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-12 px-4 sm:px-8 lg:px-12 xl:px-16 overflow-hidden border-b border-[#30363D]"
     >
       {/* Background Architectural Grid & Subtle Ambient Glow */}
       <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
@@ -153,7 +153,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       />
 
       {/* Main Structural Container with Side System Rail */}
-      <div className="flex flex-col lg:flex-row flex-grow relative z-10 my-auto py-6 sm:py-10 gap-6 lg:gap-10">
+      {/* 1792px = 1920px minus the xl gutters, matching the other sections */}
+      <div className="flex flex-col lg:flex-row flex-grow relative z-10 w-full max-w-[1792px] mx-auto my-auto py-6 sm:py-10 gap-6 lg:gap-10">
         {/* Left Side System Architectural Rail (Desktop) */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -201,8 +202,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             className="relative z-10 select-none"
           >
             <motion.h1
-              {...intro(0.2, 40)}
-              className={`${NAME_SIZE} leading-[0.82] font-black uppercase tracking-tighter text-[#C9D1D9]`}
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{
+                duration: 0.9,
+                delay: 0.2,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="text-[56px] sm:text-[84px] md:text-[104px] lg:text-[124px] xl:text-[clamp(136px,9vw,176px)] leading-[0.82] font-black uppercase tracking-tighter text-[#C9D1D9]"
             >
               RAVEESHA
             </motion.h1>
@@ -212,8 +219,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               className="relative z-20 select-none mt-1.5 sm:mt-2 lg:mt-[clamp(1.5rem,2.8vw,2.5rem)]"
             >
               <motion.h1
-                {...intro(0.32, 40)}
-                className={`${NAME_SIZE} leading-[0.82] font-black uppercase tracking-tighter text-outline hover:text-outline-strong transition-all duration-300`}
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{
+                  duration: 0.9,
+                  delay: 0.35,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="text-[56px] sm:text-[84px] md:text-[104px] lg:text-[124px] xl:text-[clamp(136px,9vw,176px)] leading-[0.82] font-black uppercase tracking-tighter text-outline hover:text-outline-strong transition-all duration-300"
               >
                 NETHSARANI
               </motion.h1>

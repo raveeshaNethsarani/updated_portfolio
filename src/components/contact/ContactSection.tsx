@@ -71,7 +71,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
       {/* Subtle Grid Pattern */}
       <div className="absolute inset-0 bg-grid-pattern opacity-15 pointer-events-none" />
 
-      <div className="section-container relative z-10">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 relative z-10">
         {/* Eyebrow */}
         <ScrollReveal className="flex items-center justify-between gap-4 border-b border-[#30363D] pb-3 mb-8 sm:mb-10">
           <div className="flex min-w-0 items-center gap-3 text-[#3FB950] mono text-[10px] sm:text-xs tracking-[0.2em] lg:tracking-[0.3em] uppercase">
@@ -84,8 +84,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
         </ScrollReveal>
 
         {/* Headline row — full width so the 6rem headline fits */}
-        <ScrollReveal delay={0.06} stagger={0.1} className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 border-b border-[#30363D] pb-8 mb-8 sm:pb-10 sm:mb-10">
-          <motion.h2 variants={revealItem} className="font-black text-[length:min(3rem,13vw)] sm:text-7xl lg:text-[length:clamp(4.5rem,7.8vw,7rem)] text-[#C9D1D9] tracking-tighter leading-[0.88] uppercase">
+        <ScrollReveal delay={0.06} className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 border-b border-[#30363D] pb-10 mb-10">
+          <h2 className="font-black text-5xl sm:text-7xl lg:text-[clamp(5rem,9vw,11rem)] text-[#C9D1D9] tracking-tighter leading-[0.88] uppercase">
             LET&apos;S BUILD
             <br />
             <span className="text-[#3FB950]">SOMETHING</span>
@@ -93,8 +93,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenResume }) 
             <span className="text-outline">MEANINGFUL.</span>
           </motion.h2>
 
-          <div className="lg:max-w-md lg:min-w-[20rem] flex flex-col gap-5">
-            <motion.p variants={revealItem} className="mono text-sm text-[#8B949E] leading-relaxed font-light">
+          <div className="lg:max-w-md 2xl:max-w-lg flex flex-col gap-5">
+            <p className="mono text-sm text-[#8B949E] leading-relaxed font-light">
               Available for technical leadership, full-stack system architecture, high-throughput
               backend services, and high-impact software engineering projects.
             </motion.p>

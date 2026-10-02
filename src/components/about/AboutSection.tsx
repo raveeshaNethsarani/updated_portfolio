@@ -29,7 +29,7 @@ export const AboutSection: React.FC = () => {
       <div className="pointer-events-none absolute inset-0 bg-dot-pattern opacity-15" />
 
       {/* Main Container */}
-      <div className="relative z-10 section-container">
+      <div className="relative z-10 mx-auto w-full max-w-[1920px] px-4 sm:px-8 lg:px-12 xl:px-16">
         
         {/* Section Header */}
         <ScrollReveal className="mb-10 flex items-center justify-between border-b border-[#30363D] pb-4 sm:mb-16 lg:mb-24">
@@ -40,12 +40,12 @@ export const AboutSection: React.FC = () => {
         </ScrollReveal>
 
         {/* Main Editorial Layout */}
-        <div className="grid grid-cols-1 gap-12 sm:gap-16 lg:grid-cols-12 lg:gap-20 xl:gap-28">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 xl:gap-20">
           
           {/* =========================================================
               LEFT — MASSIVE HEADLINE
           ========================================================== */}
-          <div className="lg:col-span-7">
+          <div>
             <div className="lg:sticky lg:top-24">
               <ScrollReveal className="mb-6 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-[#8B949E]">
                 <Terminal className="h-3.5 w-3.5 text-[#3FB950]" />
@@ -53,7 +53,7 @@ export const AboutSection: React.FC = () => {
               </ScrollReveal>
 
               <ScrollReveal delay={0.06}>
-                <h2 className="font-black uppercase leading-[0.82] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[length:clamp(5.5rem,9.4vw,8.5rem)] 2xl:text-[7rem]">
+                <h2 className="font-black uppercase leading-[0.82] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[clamp(6rem,9.5vw,11rem)]">
                 ENGINEER
                 <br />
 
@@ -85,8 +85,8 @@ export const AboutSection: React.FC = () => {
           {/* =========================================================
               RIGHT — BIOGRAPHY + CREDENTIALS + QUOTE
           ========================================================== */}
-          <div className="lg:col-span-5">
-            <ScrollReveal delay={0.08} stagger={0.1} className="space-y-10">
+          <div>
+            <ScrollReveal delay={0.08} className="space-y-10">
 
               {/* Biography */}
               <div className="space-y-6 text-[#C9D1D9]/90 ">
@@ -161,7 +161,7 @@ export const AboutSection: React.FC = () => {
 
 
          {/* Credential Cards */}
-              <div className="relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2 section-container pt-10 sm:pt-12">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 mx-auto max-w-[1920px] px-4 pt-10 sm:px-8 lg:px-12 xl:px-16">
 
                 {/* Work */}
                 <ScrollReveal delay={0.05} className="motion-lift group rounded-xl border border-[#30363D] bg-[#161B22]/70 p-5 transition-colors duration-300 hover:border-[#3FB950]/50">
