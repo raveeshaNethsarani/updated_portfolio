@@ -257,15 +257,15 @@ export const HowIBuild: React.FC = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className={`w-full flex flex-col justify-between py-16 sm:py-20 px-4 sm:px-8 lg:px-12 xl:px-16 overflow-hidden select-none ${
+          className={`w-full flex flex-col justify-between py-16 sm:py-20 gutter-x overflow-hidden select-none ${
             isDesktopPinned ? 'h-screen sticky top-0' : 'min-h-[85vh]'
           }`}
         >
           {/* Background Grid Pattern */}
           <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none" />
 
-          {/* 1792px = 1920px minus the xl gutters, matching the other sections; the background still spans ultra-wide screens */}
-          <div className="relative z-10 mx-auto flex w-full max-w-[1792px] flex-1 flex-col justify-between">
+          {/* 1824px = 1920px minus the gutter-x padding, matching section-container; the background still spans ultra-wide screens */}
+          <div className="relative z-10 mx-auto flex w-full max-w-[1824px] flex-1 flex-col justify-between">
 
           {/* Section Header */}
           <motion.div

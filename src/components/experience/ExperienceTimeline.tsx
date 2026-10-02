@@ -122,7 +122,7 @@ const EditorialHeader: React.FC<{ overview: string }> = ({ overview }) => (
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, margin: '-80px' }}
-    className="mb-16 grid grid-cols-1 gap-12 border-b border-[#30363D] pb-12 lg:mb-20 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 xl:gap-20"
+    className="mb-12 grid grid-cols-1 gap-10 border-b border-[#30363D] pb-10 sm:mb-16 sm:gap-12 sm:pb-12 lg:mb-20 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 xl:gap-20"
   >
     {/* Left */}
     <motion.div variants={fadeUp}>
@@ -131,7 +131,7 @@ const EditorialHeader: React.FC<{ overview: string }> = ({ overview }) => (
         <span>CAREER / ENGINEERING PROGRESSION</span>
       </div>
 
-      <h2 className="font-black uppercase leading-[0.84] tracking-[-0.07em] text-[#C9D1D9] text-5xl sm:text-7xl md:text-8xl lg:text-[clamp(5rem,7.5vw,9rem)]">
+      <h2 className="font-black uppercase leading-[0.84] tracking-[-0.07em] text-[#C9D1D9] text-[length:min(3rem,14vw)] sm:text-7xl md:text-8xl lg:text-[clamp(5rem,7.5vw,9rem)]">
         PRODUCTION
         <br />
         <span className="text-outline">EXPERIENCE.</span>
@@ -486,7 +486,7 @@ export const ExperienceTimeline: React.FC = () => {
       <div className="pointer-events-none absolute inset-0 bg-grid-pattern opacity-15" />
 
       {/* Container */}
-      <div className="relative z-10 mx-auto w-full max-w-[1920px] px-4 sm:px-8 lg:px-12 xl:px-16">
+      <div className="relative z-10 section-container">
         <SectionEyebrow period={currentExp.period} />
         <EditorialHeader overview={currentExp.overview} />
 
